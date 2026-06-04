@@ -1,0 +1,20 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" fill="#05070B"/>
+  <path d="M107 129H163V242L287 129H362L222 254L371 383H292L163 268V383H107V129Z" fill="url(#steel)"/>
+  <path d="M260 201H409L364 245H283L251 273L283 301H384L341 344H217L170 302L265 201Z" fill="url(#blue)"/>
+  <path d="M92 421H420" stroke="#2F80ED" stroke-width="3" stroke-linecap="round" opacity="0.65"/>
+  <text x="256" y="442" text-anchor="middle" fill="#DDE6F2" font-family="Arial, Helvetica, sans-serif" font-size="38" font-weight="700" letter-spacing="18">KRAYO</text>
+  <text x="256" y="476" text-anchor="middle" fill="#4D96FF" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" letter-spacing="15">SKRIPTZ</text>
+  <defs>
+    <linearGradient id="steel" x1="107" x2="354" y1="129" y2="384" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F4F6FA"/>
+      <stop offset="0.45" stop-color="#7F8793"/>
+      <stop offset="1" stop-color="#DDE2EA"/>
+    </linearGradient>
+    <linearGradient id="blue" x1="232" x2="406" y1="201" y2="344" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0D3872"/>
+      <stop offset="0.5" stop-color="#48A7FF"/>
+      <stop offset="1" stop-color="#0B3F91"/>
+    </linearGradient>
+  </defs>
+</svg>
