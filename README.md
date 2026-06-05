@@ -31,11 +31,11 @@ The app intentionally does not store titles or thumbnails. It reads the title fr
 Create `.env` from `.env.example`:
 
 ```bash
-VITE_SUPABASE_URL=https://your-project-ref.supabase.co
+VITE_SUPABASE_URL=https://vwiwgbvtkjyerqpjbkfc.supabase.co
 VITE_SUPABASE_ANON_KEY=wezzsupabase
 ```
 
-Important: Supabase also needs the project URL. The keys alone are not enough for the browser app to connect. Keep secret and service-role keys out of frontend code.
+You pasted `https://vwiwgbvtkjyerqpjbkfc.supabase.co/rest/v1/`; the app accepts that too and normalizes it to the base project URL automatically. Keep secret and service-role keys out of frontend code.
 
 ## Run locally
 
