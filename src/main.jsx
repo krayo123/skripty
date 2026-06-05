@@ -247,7 +247,7 @@ function PostPage({ posts, loading, error }) {
         Back
       </a>
 
-      <section className="detailLayout">
+      <section className="detailLayout" aria-label="Script preview and unlock link">
         <div className="videoPanel">
           {videoId ? (
             <iframe
@@ -261,7 +261,7 @@ function PostPage({ posts, loading, error }) {
           )}
         </div>
 
-        <aside className="unlockPanel">
+        <div className="unlockPanel">
           <p className="eyebrow">script access</p>
           <h1>{post.metadata.title}</h1>
           <p className="unlockText">Get the script using the following:</p>
@@ -270,7 +270,7 @@ function PostPage({ posts, loading, error }) {
             Lootlabs
             <ExternalLink size={18} />
           </a>
-        </aside>
+        </div>
       </section>
     </main>
   );
