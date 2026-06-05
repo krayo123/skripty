@@ -167,6 +167,64 @@ p {
   color: #93a0b3;
 }
 
+.adBlock {
+  display: grid;
+  gap: 18px;
+  justify-items: center;
+  margin: 0 0 38px;
+}
+
+.adGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, max-content));
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+  width: 100%;
+}
+
+.compactAds {
+  grid-template-columns: repeat(auto-fit, minmax(160px, max-content));
+}
+
+.adSlot,
+.nativeAdSlot,
+.directAdLink {
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  max-width: 100%;
+  border: 1px solid rgba(139, 164, 206, 0.18);
+  border-radius: 8px;
+  background: rgba(8, 13, 22, 0.62);
+}
+
+.adSlot {
+  width: min(var(--ad-width), 100%);
+  min-height: var(--ad-height);
+}
+
+.nativeAdSlot {
+  width: min(100%, 728px);
+  min-height: 120px;
+}
+
+.directAdLink {
+  min-width: 220px;
+  min-height: 50px;
+  padding: 0 18px;
+  color: #9fc4ff;
+  font-weight: 800;
+}
+
+.mobileAd {
+  display: none;
+}
+
+.detailAds {
+  margin: 0;
+}
+
 .postGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -363,6 +421,14 @@ p {
   .sectionHeader p {
     margin-top: 8px;
   }
+
+  .wideAd {
+    display: none;
+  }
+
+  .mobileAd {
+    display: grid;
+  }
 }
 
 @media (max-width: 520px) {
@@ -383,6 +449,10 @@ p {
   .brandLogo {
     width: 44px;
     height: 44px;
+  }
+
+  .adGrid {
+    grid-template-columns: 1fr;
   }
 
   .postGrid {
