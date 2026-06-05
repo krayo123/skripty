@@ -194,14 +194,19 @@ p {
   place-items: center;
   overflow: hidden;
   max-width: 100%;
-  border: 1px solid rgba(139, 164, 206, 0.18);
+  border: 1px solid rgba(139, 164, 206, 0.32);
   border-radius: 8px;
-  background: rgba(8, 13, 22, 0.62);
+  background: rgba(8, 13, 22, 0.82);
 }
 
 .adSlot {
   width: min(var(--ad-width), 100%);
   min-height: var(--ad-height);
+}
+
+iframe.adSlot {
+  display: block;
+  height: var(--ad-height);
 }
 
 .nativeAdSlot {
