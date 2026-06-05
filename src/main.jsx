@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createClient } from '@supabase/supabase-js';
 import { ArrowLeft, ExternalLink, Loader2, Play, Search } from 'lucide-react';
@@ -9,6 +9,27 @@ const defaultSupabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ
 const supabaseUrl = normalizeSupabaseUrl(getEnvValue(import.meta.env.VITE_SUPABASE_URL, defaultSupabaseUrl));
 const supabaseAnonKey = getEnvValue(import.meta.env.VITE_SUPABASE_ANON_KEY, defaultSupabaseAnonKey);
 const lootlabsLogo = 'https://i.imgur.com/chWRq9O.png';
+const directAdLink = 'https://www.effectivecpmnetwork.com/zpgbszxrzc?key=d1ab8a6a326be7a2a730e58642a92eb3';
+
+const globalAdScripts = [
+  {
+    id: 'adsterra-popunder-f91d0efc66ef091f9b1eeb1b998ad40f',
+    src: 'https://pl29649394.effectivecpmnetwork.com/f9/1d/0e/f91d0efc66ef091f9b1eeb1b998ad40f.js',
+  },
+  {
+    id: 'adsterra-popunder-142bfc32c774f5f87f5ea53d57e6c397',
+    src: 'https://pl29649398.effectivecpmnetwork.com/14/2b/fc/142bfc32c774f5f87f5ea53d57e6c397.js',
+  },
+];
+
+const iframeAds = {
+  leaderboard: { key: '27cbf4ff895d33adda60467b0a6419ae', width: 728, height: 90 },
+  banner: { key: 'c9c26ab9e39ba477671b272bce2494eb', width: 468, height: 60 },
+  mobile: { key: '65d65154be3174f30f7b3b767e09d31b', width: 320, height: 50 },
+  rectangle: { key: 'a0ec8512eb15caafae71c26a5a7aa1cb', width: 300, height: 250 },
+  skyscraper: { key: '110512ebb009dc7a5a3cdb35e6da553a', width: 160, height: 300 },
+  tallSkyscraper: { key: '75952d1ada641b0b480dfaf794dbe2cd', width: 160, height: 600 },
+};
 
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
@@ -18,6 +39,25 @@ function getEnvValue(value, fallback) {
 
 function normalizeSupabaseUrl(url) {
   return url.replace(/\/rest\/v1\/?$/, '').replace(/\/$/, '');
+}
+
+function loadScriptOnce({ id, src, async = true, cfasync }) {
+  if (document.getElementById(id)) return;
+
+  const script = document.createElement('script');
+  script.id = id;
+  script.src = src;
+  script.async = async;
+  if (cfasync !== undefined) {
+    script.dataset.cfasync = String(cfasync);
+  }
+  document.body.appendChild(script);
+}
+
+function useGlobalAdScripts() {
+  useEffect(() => {
+    globalAdScripts.forEach(loadScriptOnce);
+  }, []);
 }
 
 function getYouTubeId(url) {
@@ -74,6 +114,98 @@ function Logo() {
         <strong>Krayo</strong>Skriptz
       </span>
     </a>
+  );
+}
+
+function IframeAdSlot({ ad, className = '' }) {
+  const slotRef = useRef(null);
+
+  useEffect(() => {
+    if (!slotRef.current) return undefined;
+
+    slotRef.current.innerHTML = '';
+
+    const optionsScript = document.createElement('script');
+    optionsScript.text = `window.atOptions = ${JSON.stringify({
+      key: ad.key,
+      format: 'iframe',
+      height: ad.height,
+      width: ad.width,
+      params: {},
+    })};`;
+
+    const invokeScript = document.createElement('script');
+    invokeScript.src = `https://www.highperformanceformat.com/${ad.key}/invoke.js`;
+    invokeScript.async = true;
+
+    slotRef.current.append(optionsScript, invokeScript);
+
+    return () => {
+      if (slotRef.current) {
+        slotRef.current.innerHTML = '';
+      }
+    };
+  }, [ad]);
+
+  return (
+    <div
+      className={`adSlot ${className}`}
+      style={{ '--ad-width': `${ad.width}px`, '--ad-height': `${ad.height}px` }}
+      ref={slotRef}
+    />
+  );
+}
+
+function NativeAdSlot() {
+  useEffect(() => {
+    loadScriptOnce({
+      id: 'adsterra-native-62357ec70029d873daedb66eb2cfbba5',
+      src: 'https://pl29649395.effectivecpmnetwork.com/62357ec70029d873daedb66eb2cfbba5/invoke.js',
+      async: true,
+      cfasync: false,
+    });
+  }, []);
+
+  return (
+    <div className="nativeAdSlot">
+      <div id="container-62357ec70029d873daedb66eb2cfbba5" />
+    </div>
+  );
+}
+
+function DirectAdLink() {
+  return (
+    <a className="directAdLink" href={directAdLink} target="_blank" rel="noreferrer">
+      Sponsored link
+    </a>
+  );
+}
+
+function HomeAdBlock() {
+  return (
+    <div className="adBlock" aria-label="Sponsored">
+      <IframeAdSlot ad={iframeAds.leaderboard} className="wideAd" />
+      <IframeAdSlot ad={iframeAds.mobile} className="mobileAd" />
+      <NativeAdSlot />
+      <div className="adGrid">
+        <IframeAdSlot ad={iframeAds.rectangle} />
+        <IframeAdSlot ad={iframeAds.banner} />
+        <DirectAdLink />
+      </div>
+    </div>
+  );
+}
+
+function DetailAdBlock() {
+  return (
+    <div className="adBlock detailAds" aria-label="Sponsored">
+      <IframeAdSlot ad={iframeAds.leaderboard} className="wideAd" />
+      <IframeAdSlot ad={iframeAds.mobile} className="mobileAd" />
+      <div className="adGrid compactAds">
+        <IframeAdSlot ad={iframeAds.skyscraper} />
+        <IframeAdSlot ad={iframeAds.tallSkyscraper} />
+      </div>
+    </div>
   );
 }
 
@@ -159,6 +291,8 @@ function HomePage({ posts, loading, error }) {
       </section>
 
       <section className="contentBand" aria-label="Script posts">
+        <HomeAdBlock />
+
         <div className="sectionHeader">
           <p>{filteredPosts.length} posts</p>
           <h2>Latest Scripts</h2>
@@ -257,6 +391,8 @@ function PostPage({ posts, loading, error }) {
           )}
         </div>
 
+        <DetailAdBlock />
+
         <div className="unlockPanel">
           <p className="eyebrow">script access</p>
           <h1>{post.metadata.title}</h1>
@@ -273,6 +409,8 @@ function PostPage({ posts, loading, error }) {
 }
 
 function App() {
+  useGlobalAdScripts();
+
   const { posts, loading, error } = usePosts();
   const isPostPage = window.location.pathname.startsWith('/post/');
 
