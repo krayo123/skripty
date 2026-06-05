@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createClient } from '@supabase/supabase-js';
 import { ArrowLeft, ExternalLink, Loader2, Play, Search } from 'lucide-react';
@@ -117,41 +117,44 @@ function Logo() {
   );
 }
 
+function getAdFrameSource(ad) {
+  return `<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: transparent; }
+      body { display: flex; align-items: center; justify-content: center; }
+    </style>
+  </head>
+  <body>
+    <script>
+      atOptions = ${JSON.stringify({
+        key: ad.key,
+        format: 'iframe',
+        height: ad.height,
+        width: ad.width,
+        params: {},
+      })};
+    </script>
+    <script src="https://www.highperformanceformat.com/${ad.key}/invoke.js"></script>
+  </body>
+</html>`;
+}
+
 function IframeAdSlot({ ad, className = '' }) {
-  const slotRef = useRef(null);
-
-  useEffect(() => {
-    if (!slotRef.current) return undefined;
-
-    slotRef.current.innerHTML = '';
-
-    const optionsScript = document.createElement('script');
-    optionsScript.text = `window.atOptions = ${JSON.stringify({
-      key: ad.key,
-      format: 'iframe',
-      height: ad.height,
-      width: ad.width,
-      params: {},
-    })};`;
-
-    const invokeScript = document.createElement('script');
-    invokeScript.src = `https://www.highperformanceformat.com/${ad.key}/invoke.js`;
-    invokeScript.async = true;
-
-    slotRef.current.append(optionsScript, invokeScript);
-
-    return () => {
-      if (slotRef.current) {
-        slotRef.current.innerHTML = '';
-      }
-    };
-  }, [ad]);
-
   return (
-    <div
+    <iframe
       className={`adSlot ${className}`}
+      srcDoc={getAdFrameSource(ad)}
+      title={`Advertisement ${ad.width} by ${ad.height}`}
+      width={ad.width}
+      height={ad.height}
+      loading="lazy"
+      referrerPolicy="no-referrer-when-downgrade"
+      sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms"
       style={{ '--ad-width': `${ad.width}px`, '--ad-height': `${ad.height}px` }}
-      ref={slotRef}
     />
   );
 }
