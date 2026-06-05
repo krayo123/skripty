@@ -4,15 +4,17 @@ import { createClient } from '@supabase/supabase-js';
 import { ArrowLeft, ExternalLink, Loader2, Play, Search } from 'lucide-react';
 import './styles.css';
 
-const supabaseUrl = normalizeSupabaseUrl(
-  import.meta.env.VITE_SUPABASE_URL || 'https://vwiwgbvtkjyerqpjbkfc.supabase.co/rest/v1/',
-);
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3aXdnYnZ0a2p5ZXJxcGpia2ZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1OTg5NjIsImV4cCI6MjA5NjE3NDk2Mn0.uqMgkZTVOm0NmU54HSlQe33BeAfYxFPj5xzA_IfsXB8';
+const defaultSupabaseUrl = 'https://vwiwgbvtkjyerqpjbkfc.supabase.co/rest/v1/';
+const defaultSupabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3aXdnYnZ0a2p5ZXJxcGpia2ZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1OTg5NjIsImV4cCI6MjA5NjE3NDk2Mn0.uqMgkZTVOm0NmU54HSlQe33BeAfYxFPj5xzA_IfsXB8';
+const supabaseUrl = normalizeSupabaseUrl(getEnvValue(import.meta.env.VITE_SUPABASE_URL, defaultSupabaseUrl));
+const supabaseAnonKey = getEnvValue(import.meta.env.VITE_SUPABASE_ANON_KEY, defaultSupabaseAnonKey);
 const lootlabsLogo = 'https://i.imgur.com/chWRq9O.png';
 
-const supabase = supabaseUrl
-  ? createClient(supabaseUrl, supabaseAnonKey)
-  : null;
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+function getEnvValue(value, fallback) {
+  return typeof value === 'string' && value.trim() ? value.trim() : fallback;
+}
 
 function normalizeSupabaseUrl(url) {
   return url.replace(/\/rest\/v1\/?$/, '').replace(/\/$/, '');
@@ -84,12 +86,6 @@ function usePosts() {
     let alive = true;
 
     async function loadPosts() {
-      if (!supabase) {
-        setError('Add VITE_SUPABASE_URL in your environment to connect Supabase.');
-        setLoading(false);
-        return;
-      }
-
       const { data, error: dbError } = await supabase
         .from('posts')
         .select('id, YoutubeLink, LootlabsLink, created_at')
