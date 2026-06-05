@@ -4,13 +4,19 @@ import { createClient } from '@supabase/supabase-js';
 import { ArrowLeft, ExternalLink, Loader2, Play, Search } from 'lucide-react';
 import './styles.css';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
+const supabaseUrl = normalizeSupabaseUrl(
+  import.meta.env.VITE_SUPABASE_URL || 'https://vwiwgbvtkjyerqpjbkfc.supabase.co/rest/v1/',
+);
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'wezzsupabase';
 const lootlabsLogo = 'https://i.imgur.com/chWRq9O.png';
 
 const supabase = supabaseUrl
   ? createClient(supabaseUrl, supabaseAnonKey)
   : null;
+
+function normalizeSupabaseUrl(url) {
+  return url.replace(/\/rest\/v1\/?$/, '').replace(/\/$/, '');
+}
 
 function getYouTubeId(url) {
   try {
