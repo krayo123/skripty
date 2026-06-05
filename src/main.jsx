@@ -7,7 +7,7 @@ import './styles.css';
 const supabaseUrl = normalizeSupabaseUrl(
   import.meta.env.VITE_SUPABASE_URL || 'https://vwiwgbvtkjyerqpjbkfc.supabase.co/rest/v1/',
 );
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'wezzsupabase';
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3aXdnYnZ0a2p5ZXJxcGpia2ZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1OTg5NjIsImV4cCI6MjA5NjE3NDk2Mn0.uqMgkZTVOm0NmU54HSlQe33BeAfYxFPj5xzA_IfsXB8';
 const lootlabsLogo = 'https://i.imgur.com/chWRq9O.png';
 
 const supabase = supabaseUrl
