@@ -32,7 +32,7 @@ Create `.env` from `.env.example`:
 
 ```bash
 VITE_SUPABASE_URL=https://vwiwgbvtkjyerqpjbkfc.supabase.co
-VITE_SUPABASE_ANON_KEY=wezzsupabase
+VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3aXdnYnZ0a2p5ZXJxcGpia2ZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1OTg5NjIsImV4cCI6MjA5NjE3NDk2Mn0.uqMgkZTVOm0NmU54HSlQe33BeAfYxFPj5xzA_IfsXB8
 ```
 
 You pasted `https://vwiwgbvtkjyerqpjbkfc.supabase.co/rest/v1/`; the app accepts that too and normalizes it to the base project URL automatically. Keep secret and service-role keys out of frontend code.
