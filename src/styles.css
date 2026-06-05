@@ -274,9 +274,8 @@ p {
 
 .detailLayout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(290px, 390px);
-  gap: 24px;
-  align-items: start;
+  gap: 22px;
+  width: min(940px, 100%);
 }
 
 .videoPanel {
@@ -321,7 +320,7 @@ p {
   align-items: center;
   justify-content: center;
   gap: 10px;
-  width: 100%;
+  width: min(360px, 100%);
   min-height: 58px;
   padding: 0 18px;
   border: 1px solid rgba(84, 151, 255, 0.72);
@@ -364,10 +363,6 @@ p {
   .sectionHeader p {
     margin-top: 8px;
   }
-
-  .detailLayout {
-    grid-template-columns: 1fr;
-  }
 }
 
 @media (max-width: 520px) {
@@ -396,5 +391,9 @@ p {
 
   .unlockPanel {
     padding: 20px;
+  }
+
+  .lootButton {
+    width: 100%;
   }
 }
