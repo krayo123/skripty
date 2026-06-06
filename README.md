@@ -11,6 +11,7 @@ React + Vite website for browsing KrayoSkriptz posts from Supabase PostgreSQL.
 - Lootlabs button using the Lootlabs logo
 - Supabase SQL schema in `supabase/schema.sql`
 - Deployment routing for Vercel, Netlify, and static hosts
+- Executors page at `/executors`
 
 ## Supabase setup
 
@@ -32,10 +33,17 @@ Create `.env` from `.env.example`:
 
 ```bash
 VITE_SUPABASE_URL=https://vwiwgbvtkjyerqpjbkfc.supabase.co
-VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3aXdnYnZ0a2p5ZXJxcGpia2ZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1OTg5NjIsImV4cCI6MjA5NjE3NDk2Mn0.uqMgkZTVOm0NmU54HSlQe33BeAfYxFPj5xzA_IfsXB8
+VITE_SUPABASE_ANON_KEY=your-public-anon-key
+VITE_LOGO_URL=/logo.svg
+VITE_DISCORD_URL=https://discord.gg/YOUR_INVITE
+VITE_DIRECT_AD_LINK=https://your-direct-ad-link.example
 ```
 
 You pasted `https://vwiwgbvtkjyerqpjbkfc.supabase.co/rest/v1/`; the app accepts that too and normalizes it to the base project URL automatically. Keep secret and service-role keys out of frontend code.
+
+## Ads
+
+The project includes Adsterra-style popunder, iframe, native, and direct-link placements. Replace the existing ad script URLs, iframe keys, and `VITE_DIRECT_AD_LINK` with the codes from your own Adsterra account before treating the monetization as final.
 
 ## Run locally
 
