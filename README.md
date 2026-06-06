@@ -35,7 +35,6 @@ Create `.env` from `.env.example`:
 VITE_SUPABASE_URL=https://vwiwgbvtkjyerqpjbkfc.supabase.co
 VITE_SUPABASE_ANON_KEY=your-public-anon-key
 VITE_LOGO_URL=/logo.svg
-VITE_DISCORD_URL=https://discord.gg/YOUR_INVITE
 VITE_DIRECT_AD_LINK=https://your-direct-ad-link.example
 ```
 
