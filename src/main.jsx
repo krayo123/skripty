@@ -1,11 +1,24 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createClient } from '@supabase/supabase-js';
-import { ArrowLeft, ExternalLink, Loader2, Play, Search } from 'lucide-react';
+import {
+  ArrowLeft,
+  BadgeCheck,
+  Bolt,
+  Download,
+  ExternalLink,
+  Flame,
+  Loader2,
+  Play,
+  Search,
+  ShieldCheck,
+  Sparkles,
+} from 'lucide-react';
 import './styles.css';
 
 const defaultSupabaseUrl = 'https://vwiwgbvtkjyerqpjbkfc.supabase.co/rest/v1/';
-const defaultSupabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3aXdnYnZ0a2p5ZXJxcGpia2ZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1OTg5NjIsImV4cCI6MjA5NjE3NDk2Mn0.uqMgkZTVOm0NmU54HSlQe33BeAfYxFPj5xzA_IfsXB8';
+const defaultSupabaseAnonKey =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3aXdnYnZ0a2p5ZXJxcGpia2ZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1OTg5NjIsImV4cCI6MjA5NjE3NDk2Mn0.uqMgkZTVOm0NmU54HSlQe33BeAfYxFPj5xzA_IfsXB8';
 const supabaseUrl = normalizeSupabaseUrl(getEnvValue(import.meta.env.VITE_SUPABASE_URL, defaultSupabaseUrl));
 const supabaseAnonKey = getEnvValue(import.meta.env.VITE_SUPABASE_ANON_KEY, defaultSupabaseAnonKey);
 const lootlabsLogo = 'https://i.imgur.com/chWRq9O.png';
@@ -27,9 +40,42 @@ const iframeAds = {
   banner: { key: 'c9c26ab9e39ba477671b272bce2494eb', width: 468, height: 60 },
   mobile: { key: '65d65154be3174f30f7b3b767e09d31b', width: 320, height: 50 },
   rectangle: { key: 'a0ec8512eb15caafae71c26a5a7aa1cb', width: 300, height: 250 },
-  skyscraper: { key: '110512ebb009dc7a5a3cdb35e6da553a', width: 160, height: 300 },
-  tallSkyscraper: { key: '75952d1ada641b0b480dfaf794dbe2cd', width: 160, height: 600 },
 };
+
+const executors = [
+  {
+    name: 'Velocity',
+    tone: 'Fast inject, clean UI',
+    href: 'https://getvelocity.live/',
+    badge: 'Popular',
+    icon: Bolt,
+    palette: 'velocity',
+  },
+  {
+    name: 'Solara',
+    tone: 'Stable build for daily use',
+    href: 'https://getsolara.dev/',
+    badge: 'Stable',
+    icon: ShieldCheck,
+    palette: 'solara',
+  },
+  {
+    name: 'Xeno',
+    tone: 'Lightweight executor setup',
+    href: 'https://xeno.onl/',
+    badge: 'Light',
+    icon: Sparkles,
+    palette: 'xeno',
+  },
+  {
+    name: 'Madium',
+    tone: 'Simple launch and download',
+    href: 'https://madium.xyz/',
+    badge: 'New',
+    icon: Flame,
+    palette: 'madium',
+  },
+];
 
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
@@ -87,7 +133,7 @@ function getThumbnail(url) {
 async function getVideoMetadata(url) {
   const id = getYouTubeId(url);
   const fallback = {
-    title: id ? `YouTube Video ${id}` : 'YouTube Video',
+    title: id ? `Roblox Script ${id}` : 'Roblox Script',
     thumbnail: getThumbnail(url),
   };
 
@@ -109,11 +155,32 @@ async function getVideoMetadata(url) {
 function Logo() {
   return (
     <a className="logoLockup" href="/" aria-label="KrayoSkriptz home">
-      <img src="/logo.svg" alt="KrayoSkriptz logo" className="brandLogo" />
+      <span className="brandMark">KS</span>
       <span>
         <strong>Krayo</strong>Skriptz
       </span>
     </a>
+  );
+}
+
+function SiteHeader() {
+  const path = window.location.pathname;
+
+  return (
+    <header className="siteHeader">
+      <Logo />
+      <nav className="navPills" aria-label="Main navigation">
+        <a className={path === '/' ? 'active' : ''} href="/">
+          Scripts
+        </a>
+        <a className={path.startsWith('/executors') ? 'active' : ''} href="/executors">
+          Executors
+        </a>
+        <a className="discordLink" href="https://discord.gg/" target="_blank" rel="noreferrer">
+          Discord
+        </a>
+      </nav>
+    </header>
   );
 }
 
@@ -179,35 +246,18 @@ function NativeAdSlot() {
 function DirectAdLink() {
   return (
     <a className="directAdLink" href={directAdLink} target="_blank" rel="noreferrer">
-      Sponsored link
+      Sponsored boost
+      <ExternalLink size={16} />
     </a>
   );
 }
 
-function HomeAdBlock() {
+function AdStrip() {
   return (
-    <div className="adBlock" aria-label="Sponsored">
+    <div className="adStrip" aria-label="Sponsored">
       <IframeAdSlot ad={iframeAds.leaderboard} className="wideAd" />
       <IframeAdSlot ad={iframeAds.mobile} className="mobileAd" />
-      <NativeAdSlot />
-      <div className="adGrid">
-        <IframeAdSlot ad={iframeAds.rectangle} />
-        <IframeAdSlot ad={iframeAds.banner} />
-        <DirectAdLink />
-      </div>
-    </div>
-  );
-}
-
-function DetailAdBlock() {
-  return (
-    <div className="adBlock detailAds" aria-label="Sponsored">
-      <IframeAdSlot ad={iframeAds.leaderboard} className="wideAd" />
-      <IframeAdSlot ad={iframeAds.mobile} className="mobileAd" />
-      <div className="adGrid compactAds">
-        <IframeAdSlot ad={iframeAds.skyscraper} />
-        <IframeAdSlot ad={iframeAds.tallSkyscraper} />
-      </div>
+      <DirectAdLink />
     </div>
   );
 }
@@ -256,6 +306,70 @@ function usePosts() {
   return { posts, loading, error };
 }
 
+function HeroPanel({ postsCount, query, setQuery }) {
+  return (
+    <section className="hero">
+      <div className="heroCopy">
+        <p className="eyebrow">Roblox scripts hub</p>
+        <h1>Fresh scripts without the chaos.</h1>
+        <p className="intro">
+          Browse new releases, preview gameplay videos, and jump straight to the script unlock.
+        </p>
+      </div>
+
+      <div className="heroConsole">
+        <div className="consoleTop">
+          <span />
+          <span />
+          <span />
+        </div>
+        <div className="consoleBody">
+          <p>scripts loaded</p>
+          <strong>{postsCount}</strong>
+          <span>updated from latest posts</span>
+        </div>
+        <div className="searchShell">
+          <Search size={20} aria-hidden="true" />
+          <input
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="Search scripts"
+            aria-label="Search scripts"
+          />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ScriptCard({ post, index }) {
+  return (
+    <a className="postCard" href={`/post/${post.id}`}>
+      <span className="thumbWrap">
+        <img
+          src={post.metadata.thumbnail}
+          alt=""
+          loading={index < 6 ? 'eager' : 'lazy'}
+          onError={(event) => {
+            event.currentTarget.style.display = 'none';
+          }}
+        />
+        <span className="playBadge">
+          <Play size={18} fill="currentColor" />
+        </span>
+        <span className="hotBadge">New</span>
+      </span>
+      <span className="postText">
+        <strong>{post.metadata.title}</strong>
+        <span>
+          Open script
+          <ExternalLink size={16} />
+        </span>
+      </span>
+    </a>
+  );
+}
+
 function HomePage({ posts, loading, error }) {
   const [query, setQuery] = useState('');
 
@@ -270,35 +384,18 @@ function HomePage({ posts, loading, error }) {
   }, [posts, query]);
 
   return (
-    <main>
-      <section className="hero">
-        <div className="heroInner">
-          <Logo />
-          <div className="heroCopy">
-            <p className="eyebrow">premium roblox scripts</p>
-            <h1>KrayoSkriptz</h1>
-            <p className="intro">
-              Browse the latest releases, preview each video, and unlock the script through Lootlabs.
-            </p>
-          </div>
-          <div className="searchShell">
-            <Search size={20} aria-hidden="true" />
-            <input
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search scripts"
-              aria-label="Search scripts"
-            />
-          </div>
-        </div>
-      </section>
+    <main className="pageShell">
+      <SiteHeader />
+      <HeroPanel postsCount={posts.length} query={query} setQuery={setQuery} />
+      <AdStrip />
 
       <section className="contentBand" aria-label="Script posts">
-        <HomeAdBlock />
-
         <div className="sectionHeader">
-          <p>{filteredPosts.length} posts</p>
-          <h2>Latest Scripts</h2>
+          <div>
+            <p className="eyebrow">latest drops</p>
+            <h2>Scripts that players are looking for</h2>
+          </div>
+          <span>{filteredPosts.length} posts</span>
         </div>
 
         {error ? <div className="statusPanel">{error}</div> : null}
@@ -315,27 +412,55 @@ function HomePage({ posts, loading, error }) {
         ) : null}
 
         <div className="postGrid">
-          {filteredPosts.map((post) => (
-            <a className="postCard" href={`/post/${post.id}`} key={post.id}>
-              <span className="thumbWrap">
-                <img
-                  src={post.metadata.thumbnail}
-                  alt=""
-                  loading="lazy"
-                  onError={(event) => {
-                    event.currentTarget.style.display = 'none';
-                  }}
-                />
-                <span className="playBadge">
-                  <Play size={18} fill="currentColor" />
-                </span>
-              </span>
-              <span className="postText">
-                <strong>{post.metadata.title}</strong>
-                <span>Open script</span>
-              </span>
-            </a>
+          {filteredPosts.map((post, index) => (
+            <ScriptCard post={post} index={index} key={post.id} />
           ))}
+        </div>
+      </section>
+    </main>
+  );
+}
+
+function ExecutorsPage() {
+  return (
+    <main className="pageShell">
+      <SiteHeader />
+
+      <section className="executorsHero">
+        <div>
+          <p className="eyebrow">executor downloads</p>
+          <h1>Pick a setup and get moving.</h1>
+          <p className="intro">
+            A focused download page for the tools players search for most, with bold previews and simple actions.
+          </p>
+        </div>
+      </section>
+
+      <AdStrip />
+
+      <section className="contentBand">
+        <div className="executorGrid">
+          {executors.map((executor) => {
+            const Icon = executor.icon;
+            return (
+              <article className={`executorCard ${executor.palette}`} key={executor.name}>
+                <div className="executorPoster">
+                  <Icon size={76} strokeWidth={1.7} />
+                  <span>{executor.badge}</span>
+                </div>
+                <div className="executorBody">
+                  <div>
+                    <h2>{executor.name}</h2>
+                    <p>{executor.tone}</p>
+                  </div>
+                  <a href={executor.href} target="_blank" rel="noreferrer">
+                    <Download size={18} />
+                    Download
+                  </a>
+                </div>
+              </article>
+            );
+          })}
         </div>
       </section>
     </main>
@@ -349,8 +474,8 @@ function PostPage({ posts, loading, error }) {
 
   if (loading) {
     return (
-      <main className="detailShell">
-        <Logo />
+      <main className="pageShell">
+        <SiteHeader />
         <div className="statusPanel loading">
           <Loader2 size={20} />
           Loading preview
@@ -361,8 +486,8 @@ function PostPage({ posts, loading, error }) {
 
   if (error || !post) {
     return (
-      <main className="detailShell">
-        <Logo />
+      <main className="pageShell">
+        <SiteHeader />
         <a className="backLink" href="/">
           <ArrowLeft size={18} />
           Back
@@ -373,11 +498,11 @@ function PostPage({ posts, loading, error }) {
   }
 
   return (
-    <main className="detailShell">
-      <Logo />
+    <main className="pageShell">
+      <SiteHeader />
       <a className="backLink" href="/">
         <ArrowLeft size={18} />
-        Back
+        Back to scripts
       </a>
 
       <section className="detailLayout" aria-label="Script preview and unlock link">
@@ -394,17 +519,24 @@ function PostPage({ posts, loading, error }) {
           )}
         </div>
 
-        <DetailAdBlock />
-
-        <div className="unlockPanel">
+        <aside className="unlockPanel">
           <p className="eyebrow">script access</p>
           <h1>{post.metadata.title}</h1>
-          <p className="unlockText">Get the script using the following:</p>
+          <p className="unlockText">Preview the video, then unlock the script through the verified link.</p>
           <a className="lootButton" href={post.LootlabsLink} target="_blank" rel="noreferrer">
             <img src={lootlabsLogo} alt="" />
             Lootlabs
             <ExternalLink size={18} />
           </a>
+          <div className="trustRow">
+            <BadgeCheck size={18} />
+            Fresh post source
+          </div>
+        </aside>
+
+        <div className="detailAds">
+          <IframeAdSlot ad={iframeAds.rectangle} />
+          <NativeAdSlot />
         </div>
       </section>
     </main>
@@ -416,12 +548,11 @@ function App() {
 
   const { posts, loading, error } = usePosts();
   const isPostPage = window.location.pathname.startsWith('/post/');
+  const isExecutorsPage = window.location.pathname.startsWith('/executors');
 
-  return isPostPage ? (
-    <PostPage posts={posts} loading={loading} error={error} />
-  ) : (
-    <HomePage posts={posts} loading={loading} error={error} />
-  );
+  if (isPostPage) return <PostPage posts={posts} loading={loading} error={error} />;
+  if (isExecutorsPage) return <ExecutorsPage />;
+  return <HomePage posts={posts} loading={loading} error={error} />;
 }
 
 createRoot(document.getElementById('root')).render(<App />);
