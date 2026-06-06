@@ -21,8 +21,13 @@ const defaultSupabaseAnonKey =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3aXdnYnZ0a2p5ZXJxcGpia2ZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1OTg5NjIsImV4cCI6MjA5NjE3NDk2Mn0.uqMgkZTVOm0NmU54HSlQe33BeAfYxFPj5xzA_IfsXB8';
 const supabaseUrl = normalizeSupabaseUrl(getEnvValue(import.meta.env.VITE_SUPABASE_URL, defaultSupabaseUrl));
 const supabaseAnonKey = getEnvValue(import.meta.env.VITE_SUPABASE_ANON_KEY, defaultSupabaseAnonKey);
+const logoUrl = getEnvValue(import.meta.env.VITE_LOGO_URL, '/logo.svg');
+const discordUrl = getEnvValue(import.meta.env.VITE_DISCORD_URL, 'https://discord.gg/');
 const lootlabsLogo = 'https://i.imgur.com/chWRq9O.png';
-const directAdLink = 'https://www.effectivecpmnetwork.com/zpgbszxrzc?key=d1ab8a6a326be7a2a730e58642a92eb3';
+const directAdLink = getEnvValue(
+  import.meta.env.VITE_DIRECT_AD_LINK,
+  'https://www.effectivecpmnetwork.com/zpgbszxrzc?key=d1ab8a6a326be7a2a730e58642a92eb3',
+);
 
 const globalAdScripts = [
   {
@@ -153,9 +158,20 @@ async function getVideoMetadata(url) {
 }
 
 function Logo() {
+  const [logoFailed, setLogoFailed] = useState(false);
+
   return (
     <a className="logoLockup" href="/" aria-label="KrayoSkriptz home">
-      <span className="brandMark">KS</span>
+      {logoFailed ? (
+        <span className="brandMark">KS</span>
+      ) : (
+        <img
+          src={logoUrl}
+          alt=""
+          className="brandLogo"
+          onError={() => setLogoFailed(true)}
+        />
+      )}
       <span>
         <strong>Krayo</strong>Skriptz
       </span>
@@ -176,7 +192,7 @@ function SiteHeader() {
         <a className={path.startsWith('/executors') ? 'active' : ''} href="/executors">
           Executors
         </a>
-        <a className="discordLink" href="https://discord.gg/" target="_blank" rel="noreferrer">
+        <a className="discordLink" href={discordUrl} target="_blank" rel="noreferrer">
           Discord
         </a>
       </nav>
@@ -191,11 +207,13 @@ function getAdFrameSource(ad) {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
-      html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: transparent; }
+      html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: #080b13; color: #6f7b91; font-family: Inter, Arial, sans-serif; }
       body { display: flex; align-items: center; justify-content: center; }
+      .fallback { position: absolute; inset: 0; display: grid; place-items: center; border: 1px solid rgba(154,176,214,.16); font-size: 12px; font-weight: 800; text-transform: uppercase; }
     </style>
   </head>
   <body>
+    <div class="fallback">Ad space</div>
     <script>
       atOptions = ${JSON.stringify({
         key: ad.key,
@@ -522,7 +540,8 @@ function PostPage({ posts, loading, error }) {
         <aside className="unlockPanel">
           <p className="eyebrow">script access</p>
           <h1>{post.metadata.title}</h1>
-          <p className="unlockText">Preview the video, then unlock the script through the verified link.</p>
+          <p className="unlockText">Get the script using the following:</p>
+          <p className="unlockHint">Click Lootlabs below to unlock the script.</p>
           <a className="lootButton" href={post.LootlabsLink} target="_blank" rel="noreferrer">
             <img src={lootlabsLogo} alt="" />
             Lootlabs
