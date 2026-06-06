@@ -22,7 +22,6 @@ const defaultSupabaseAnonKey =
 const supabaseUrl = normalizeSupabaseUrl(getEnvValue(import.meta.env.VITE_SUPABASE_URL, defaultSupabaseUrl));
 const supabaseAnonKey = getEnvValue(import.meta.env.VITE_SUPABASE_ANON_KEY, defaultSupabaseAnonKey);
 const logoUrl = getEnvValue(import.meta.env.VITE_LOGO_URL, '/logo.svg');
-const discordUrl = getEnvValue(import.meta.env.VITE_DISCORD_URL, 'https://discord.gg/');
 const lootlabsLogo = 'https://i.imgur.com/chWRq9O.png';
 const directAdLink = getEnvValue(
   import.meta.env.VITE_DIRECT_AD_LINK,
@@ -193,9 +192,6 @@ function SiteHeader() {
         </a>
         <a className={path.startsWith('/executors') ? 'active' : ''} href="/executors">
           Executors
-        </a>
-        <a className="discordLink" href={discordUrl} target="_blank" rel="noreferrer">
-          Discord
         </a>
       </nav>
     </header>
