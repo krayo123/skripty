@@ -131,6 +131,17 @@ p {
   box-shadow: 0 0 28px rgba(0, 224, 255, 0.2);
 }
 
+.brandLogo {
+  display: block;
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  border: 1px solid rgba(159, 252, 255, 0.24);
+  border-radius: 8px;
+  background: rgba(11, 16, 27, 0.86);
+  box-shadow: 0 0 28px rgba(0, 224, 255, 0.16);
+}
+
 .navPills {
   display: flex;
   align-items: center;
@@ -671,6 +682,12 @@ iframe.adSlot {
   line-height: 1.55;
 }
 
+.unlockHint {
+  margin: -8px 0 18px;
+  color: #8f9bb0;
+  line-height: 1.5;
+}
+
 .lootButton {
   width: 100%;
 }
@@ -769,6 +786,11 @@ iframe.adSlot {
   }
 
   .brandMark {
+    width: 42px;
+    height: 42px;
+  }
+
+  .brandLogo {
     width: 42px;
     height: 42px;
   }
