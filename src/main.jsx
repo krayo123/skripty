@@ -205,13 +205,10 @@ function getAdFrameSource(ad) {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
-      html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: #080b13; color: #6f7b91; font-family: Inter, Arial, sans-serif; }
-      body { display: flex; align-items: center; justify-content: center; }
-      .fallback { position: absolute; inset: 0; display: grid; place-items: center; border: 1px solid rgba(154,176,214,.16); font-size: 12px; font-weight: 800; text-transform: uppercase; }
+      html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: transparent; }
     </style>
   </head>
   <body>
-    <div class="fallback">Ad space</div>
     <script>
       atOptions = ${JSON.stringify({
         key: ad.key,
@@ -277,6 +274,19 @@ function AdStrip() {
       <DirectAdLink />
       <NativeAdSlot />
     </div>
+  );
+}
+
+function SideAdRails() {
+  return (
+    <>
+      <aside className="sideAdRail leftRail" aria-label="Sponsored left">
+        <IframeAdSlot ad={iframeAds.tallSkyscraper} className="railAd" />
+      </aside>
+      <aside className="sideAdRail rightRail" aria-label="Sponsored right">
+        <IframeAdSlot ad={iframeAds.skyscraper} className="railAd" />
+      </aside>
+    </>
   );
 }
 
@@ -570,10 +580,22 @@ function App() {
   const { posts, loading, error } = usePosts();
   const isPostPage = window.location.pathname.startsWith('/post/');
   const isExecutorsPage = window.location.pathname.startsWith('/executors');
+  let page;
 
-  if (isPostPage) return <PostPage posts={posts} loading={loading} error={error} />;
-  if (isExecutorsPage) return <ExecutorsPage />;
-  return <HomePage posts={posts} loading={loading} error={error} />;
+  if (isPostPage) {
+    page = <PostPage posts={posts} loading={loading} error={error} />;
+  } else if (isExecutorsPage) {
+    page = <ExecutorsPage />;
+  } else {
+    page = <HomePage posts={posts} loading={loading} error={error} />;
+  }
+
+  return (
+    <>
+      <SideAdRails />
+      {page}
+    </>
+  );
 }
 
 createRoot(document.getElementById('root')).render(<App />);
