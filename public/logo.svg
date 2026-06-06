@@ -1,20 +1,63 @@
-<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="512" height="512" fill="#05070B"/>
-  <path d="M107 129H163V242L287 129H362L222 254L371 383H292L163 268V383H107V129Z" fill="url(#steel)"/>
-  <path d="M260 201H409L364 245H283L251 273L283 301H384L341 344H217L170 302L265 201Z" fill="url(#blue)"/>
-  <path d="M92 421H420" stroke="#2F80ED" stroke-width="3" stroke-linecap="round" opacity="0.65"/>
-  <text x="256" y="442" text-anchor="middle" fill="#DDE6F2" font-family="Arial, Helvetica, sans-serif" font-size="38" font-weight="700" letter-spacing="18">KRAYO</text>
-  <text x="256" y="476" text-anchor="middle" fill="#4D96FF" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" letter-spacing="15">SKRIPTZ</text>
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="KrayoSkriptz logo">
   <defs>
-    <linearGradient id="steel" x1="107" x2="354" y1="129" y2="384" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#F4F6FA"/>
-      <stop offset="0.45" stop-color="#7F8793"/>
-      <stop offset="1" stop-color="#DDE2EA"/>
+    <linearGradient id="frame" x1="64" y1="66" x2="448" y2="448" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#00F0FF"/>
+      <stop offset="0.52" stop-color="#2D7DFF"/>
+      <stop offset="1" stop-color="#FF2ACB"/>
     </linearGradient>
-    <linearGradient id="blue" x1="232" x2="406" y1="201" y2="344" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#0D3872"/>
-      <stop offset="0.5" stop-color="#48A7FF"/>
-      <stop offset="1" stop-color="#0B3F91"/>
+    <linearGradient id="kFill" x1="120" y1="118" x2="318" y2="392" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#EFFFFF"/>
+      <stop offset="0.2" stop-color="#00E8FF"/>
+      <stop offset="0.72" stop-color="#197BFF"/>
+      <stop offset="1" stop-color="#0B1022"/>
     </linearGradient>
+    <linearGradient id="sFill" x1="262" y1="155" x2="416" y2="405" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFE9FF"/>
+      <stop offset="0.18" stop-color="#FF2ACB"/>
+      <stop offset="0.7" stop-color="#C319FF"/>
+      <stop offset="1" stop-color="#210628"/>
+    </linearGradient>
+    <linearGradient id="lime" x1="370" y1="145" x2="425" y2="222" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#D7FF4D"/>
+      <stop offset="1" stop-color="#63FF00"/>
+    </linearGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="9" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.04 0 0 0 0 0.95 0 0 0 0 1 0 0 0 0.72 0" result="cyanGlow"/>
+      <feMerge>
+        <feMergeNode in="cyanGlow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="pinkGlow" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="0 0 0 0 1 0 0 0 0 0.08 0 0 0 0 0.82 0 0 0 0.68 0" result="magentaGlow"/>
+      <feMerge>
+        <feMergeNode in="magentaGlow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="22" stdDeviation="22" flood-color="#000000" flood-opacity="0.55"/>
+    </filter>
   </defs>
+
+  <rect width="512" height="512" rx="82" fill="#05070D"/>
+  <rect x="18" y="18" width="476" height="476" rx="72" fill="url(#frame)" opacity="0.23"/>
+  <rect x="32" y="32" width="448" height="448" rx="60" fill="#080D18" stroke="url(#frame)" stroke-width="8"/>
+  <rect x="48" y="48" width="416" height="416" rx="48" fill="#0B1020" stroke="#1D2B45" stroke-width="2" opacity="0.92"/>
+
+  <g filter="url(#softShadow)">
+    <path d="M105 118H166V239L283 118H361L232 252L372 394H287L166 274V394H105V118Z" fill="#031527" stroke="#00E8FF" stroke-width="20" stroke-linejoin="round" filter="url(#glow)"/>
+    <path d="M105 118H166V239L283 118H361L232 252L372 394H287L166 274V394H105V118Z" fill="url(#kFill)" stroke="#A9FAFF" stroke-width="4" stroke-linejoin="round"/>
+
+    <path d="M271 148H416L386 208H296L275 231L302 252H382C415 252 438 274 438 309C438 329 430 347 414 361L380 394H223L253 334H361L384 313L359 292H281C247 292 224 270 224 235C224 215 232 197 247 183L271 148Z" fill="#19051E" stroke="#FF2ACB" stroke-width="20" stroke-linejoin="round" filter="url(#pinkGlow)"/>
+    <path d="M271 148H416L386 208H296L275 231L302 252H382C415 252 438 274 438 309C438 329 430 347 414 361L380 394H223L253 334H361L384 313L359 292H281C247 292 224 270 224 235C224 215 232 197 247 183L271 148Z" fill="url(#sFill)" stroke="#FFD6FA" stroke-width="4" stroke-linejoin="round"/>
+  </g>
+
+  <path d="M405 122L382 184L424 154L398 219L462 124L424 151L438 96L405 122Z" fill="url(#lime)" opacity="0.92"/>
+  <path d="M96 422L124 360L82 390L112 326L48 422L88 392L78 450L96 422Z" fill="url(#lime)" opacity="0.88"/>
+  <path d="M78 174L118 188" stroke="#00E8FF" stroke-width="6" stroke-linecap="round" opacity="0.78"/>
+  <path d="M432 255L463 247" stroke="#FF2ACB" stroke-width="6" stroke-linecap="round" opacity="0.8"/>
+  <path d="M198 90L222 72" stroke="#00E8FF" stroke-width="5" stroke-linecap="round" opacity="0.68"/>
 </svg>
