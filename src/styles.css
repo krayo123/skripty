@@ -316,10 +316,11 @@ p {
 }
 
 .adStrip {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  display: flex;
+  flex-wrap: wrap;
   gap: 14px;
   align-items: center;
+  justify-content: center;
   margin: 0 0 34px;
 }
 
@@ -348,6 +349,10 @@ iframe.adSlot {
 .nativeAdSlot {
   width: min(100%, 728px);
   min-height: 120px;
+}
+
+.adStrip .nativeAdSlot {
+  flex: 1 1 360px;
 }
 
 .directAdLink {
@@ -708,11 +713,16 @@ iframe.adSlot {
 }
 
 .detailAds {
-  display: grid;
+  display: flex;
+  flex-wrap: wrap;
   grid-column: 1 / -1;
-  grid-template-columns: repeat(auto-fit, minmax(260px, max-content));
   gap: 16px;
-  align-items: start;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.detailAds .nativeAdSlot {
+  flex: 1 1 320px;
 }
 
 @keyframes spin {
@@ -761,7 +771,8 @@ iframe.adSlot {
     padding-top: 42px;
   }
 
-  .wideAd {
+  .wideAd,
+  .bannerAd {
     display: none;
   }
 
