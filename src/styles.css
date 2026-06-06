@@ -366,6 +366,22 @@ iframe.adSlot {
   display: none;
 }
 
+.sideAdRail {
+  position: fixed;
+  top: 112px;
+  z-index: 8;
+  display: none;
+  flex-direction: column;
+  gap: 14px;
+  pointer-events: none;
+}
+
+.sideAdRail .adSlot {
+  background: rgba(8, 11, 19, 0.9);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.28);
+  pointer-events: auto;
+}
+
 .contentBand {
   padding: 10px 0 0;
 }
@@ -594,7 +610,7 @@ iframe.adSlot {
   display: grid;
   align-content: space-between;
   gap: 20px;
-  padding: 20ppx;
+  padding: 20px;
 }
 
 .executorBody h2 {
@@ -722,6 +738,26 @@ iframe.adSlot {
 @keyframes spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+@media (min-width: 1600px) {
+  .sideAdRail {
+    display: flex;
+  }
+
+  .leftRail {
+    left: max(16px, calc((100vw - 1220px) / 2 - 188px));
+  }
+
+  .rightRail {
+    right: max(16px, calc((100vw - 1220px) / 2 - 188px));
+  }
+}
+
+@media (max-height: 760px) and (min-width: 1600px) {
+  .sideAdRail {
+    top: 92px;
   }
 }
 
