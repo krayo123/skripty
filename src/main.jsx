@@ -93,8 +93,9 @@ function normalizeSupabaseUrl(url) {
   return url.replace(/\/rest\/v1\/?$/, '').replace(/\/$/, '');
 }
 
-function loadScriptOnce({ id, src, async = true, cfasync }) {
-  if (document.getElementById(id)) return;
+function loadScriptOnce({ id, src, async = true, cfasync, onLoad, onError }) {
+  const existingScript = document.getElementById(id);
+  if (existingScript) return;
 
   const script = document.createElement('script');
   script.id = id;
@@ -103,21 +104,84 @@ function loadScriptOnce({ id, src, async = true, cfasync }) {
   if (cfasync !== undefined) {
     script.dataset.cfasync = String(cfasync);
   }
+  if (onLoad) script.addEventListener('load', onLoad, { once: true });
+  if (onError) script.addEventListener('error', onError, { once: true });
   document.body.appendChild(script);
 }
 
 function useGlobalAdScripts() {
   useEffect(() => {
-    globalAdScripts.forEach(loadScriptOnce);
+    globalAdScripts.forEach((adScript) => {
+      loadScriptOnce({
+        ...adScript,
+        onError: () => window.dispatchEvent(new Event('krayo-ad-block-detected')),
+      });
+    });
   }, []);
+}
+
+function useAdBlockDetection() {
+  const [isBlocked, setIsBlocked] = useState(false);
+
+  useEffect(() => {
+    let alive = true;
+    const markBlocked = () => {
+      if (alive) setIsBlocked(true);
+    };
+
+    window.addEventListener('krayo-ad-block-detected', markBlocked);
+
+    const bait = document.createElement('div');
+    bait.className = 'adsbox adsbygoogle ad-banner ad-unit text-ad pub_300x250';
+    bait.setAttribute('aria-hidden', 'true');
+    bait.style.cssText =
+      'position:absolute;left:-10000px;top:-10000px;width:1px;height:1px;pointer-events:none;';
+    document.body.appendChild(bait);
+
+    const timerId = window.setTimeout(() => {
+      const style = window.getComputedStyle(bait);
+      const baitWasBlocked =
+        bait.offsetHeight === 0 ||
+        bait.offsetWidth === 0 ||
+        style.display === 'none' ||
+        style.visibility === 'hidden';
+
+      bait.remove();
+      if (baitWasBlocked) markBlocked();
+    }, 900);
+
+    return () => {
+      alive = false;
+      window.clearTimeout(timerId);
+      window.removeEventListener('krayo-ad-block-detected', markBlocked);
+      bait.remove();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isBlocked) return undefined;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isBlocked]);
+
+  return isBlocked;
 }
 
 function getYouTubeId(url) {
   try {
     const parsed = new URL(url);
-    if (parsed.hostname.includes('youtu.be')) {
+    const hostname = parsed.hostname.replace(/^www\./, '').toLowerCase();
+    const isYouTubeHost = hostname === 'youtube.com' || hostname.endsWith('.youtube.com');
+
+    if (hostname === 'youtu.be') {
       return parsed.pathname.replace('/', '').split('?')[0];
     }
+    if (!isYouTubeHost) return '';
     if (parsed.searchParams.get('v')) {
       return parsed.searchParams.get('v');
     }
@@ -233,7 +297,7 @@ function IframeAdSlot({ ad, className = '' }) {
       height={ad.height}
       loading="lazy"
       referrerPolicy="no-referrer-when-downgrade"
-      sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms"
+      sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox allow-forms"
       style={{ '--ad-width': `${ad.width}px`, '--ad-height': `${ad.height}px` }}
     />
   );
@@ -258,7 +322,7 @@ function NativeAdSlot() {
 
 function DirectAdLink() {
   return (
-    <a className="directAdLink" href={directAdLink} target="_blank" rel="noreferrer">
+    <a className="directAdLink" href={directAdLink} target="_blank" rel="noopener noreferrer">
       Sponsored boost
       <ExternalLink size={16} />
     </a>
@@ -287,6 +351,79 @@ function SideAdRails() {
         <IframeAdSlot ad={iframeAds.skyscraper} className="railAd" />
       </aside>
     </>
+  );
+}
+
+const adBlockGateStyles = {
+  gate: {
+    position: 'fixed',
+    inset: 0,
+    zIndex: 999,
+    display: 'grid',
+    placeItems: 'center',
+    padding: 24,
+    background:
+      'linear-gradient(115deg, rgba(3, 5, 10, 0.96), rgba(7, 9, 15, 0.92)), repeating-linear-gradient(90deg, rgba(159, 252, 255, 0.08) 0 1px, transparent 1px 42px)',
+    backdropFilter: 'blur(18px)',
+  },
+  panel: {
+    display: 'grid',
+    gap: 16,
+    width: 'min(100%, 500px)',
+    padding: 28,
+    border: '1px solid rgba(255, 42, 141, 0.36)',
+    borderRadius: 8,
+    background:
+      'linear-gradient(180deg, rgba(17, 23, 39, 0.96), rgba(8, 11, 19, 0.98)), #080b13',
+    boxShadow: '0 26px 90px rgba(0, 0, 0, 0.58), 0 0 42px rgba(255, 42, 141, 0.12)',
+  },
+  heading: {
+    margin: 0,
+    color: '#ffffff',
+    fontSize: 'clamp(2rem, 6vw, 3.2rem)',
+    lineHeight: 0.98,
+    letterSpacing: 0,
+  },
+  copy: {
+    margin: 0,
+    color: '#cbd5e2',
+    lineHeight: 1.55,
+  },
+  button: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 54,
+    padding: '0 18px',
+    border: '1px solid rgba(0, 224, 255, 0.42)',
+    borderRadius: 8,
+    color: '#061019',
+    fontWeight: 1000,
+    cursor: 'pointer',
+    background: 'linear-gradient(135deg, #9ffcff, #9dff57)',
+    boxShadow: '0 18px 46px rgba(0, 224, 255, 0.14)',
+  },
+};
+
+function AdBlockGate({ isBlocked }) {
+  if (!isBlocked) return null;
+
+  return (
+    <div style={adBlockGateStyles.gate} role="dialog" aria-modal="true" aria-labelledby="adblock-title">
+      <div style={adBlockGateStyles.panel}>
+        <Logo />
+        <p className="eyebrow">ad blocker detected</p>
+        <h2 id="adblock-title" style={adBlockGateStyles.heading}>
+          Disable AdBlock to enter.
+        </h2>
+        <p style={adBlockGateStyles.copy}>
+          KrayoSkriptz uses ads to keep scripts free. Turn off your ad blocker for this site, then reload.
+        </p>
+        <button type="button" style={adBlockGateStyles.button} onClick={() => window.location.reload()}>
+          Reload page
+        </button>
+      </div>
+    </div>
   );
 }
 
@@ -374,14 +511,16 @@ function ScriptCard({ post, index }) {
   return (
     <a className="postCard" href={`/post/${post.id}`}>
       <span className="thumbWrap">
-        <img
-          src={post.metadata.thumbnail}
-          alt=""
-          loading={index < 6 ? 'eager' : 'lazy'}
-          onError={(event) => {
-            event.currentTarget.style.display = 'none';
-          }}
-        />
+        {post.metadata.thumbnail ? (
+          <img
+            src={post.metadata.thumbnail}
+            alt=""
+            loading={index < 6 ? 'eager' : 'lazy'}
+            onError={(event) => {
+              event.currentTarget.style.display = 'none';
+            }}
+          />
+        ) : null}
         <span className="playBadge">
           <Play size={18} fill="currentColor" />
         </span>
@@ -481,7 +620,7 @@ function ExecutorsPage() {
                     <h2>{executor.name}</h2>
                     <p>{executor.tone}</p>
                   </div>
-                  <a href={executor.href} target="_blank" rel="noreferrer">
+                  <a href={executor.href} target="_blank" rel="noopener noreferrer">
                     <Download size={18} />
                     Download
                   </a>
@@ -552,7 +691,7 @@ function PostPage({ posts, loading, error }) {
           <h1>{post.metadata.title}</h1>
           <p className="unlockText">Get the script using the following:</p>
           <p className="unlockHint">Click Lootlabs below to unlock the script.</p>
-          <a className="lootButton" href={post.LootlabsLink} target="_blank" rel="noreferrer">
+          <a className="lootButton" href={post.LootlabsLink} target="_blank" rel="noopener noreferrer">
             <img src={lootlabsLogo} alt="" />
             Lootlabs
             <ExternalLink size={18} />
@@ -576,6 +715,7 @@ function PostPage({ posts, loading, error }) {
 
 function App() {
   useGlobalAdScripts();
+  const isAdBlockDetected = useAdBlockDetection();
 
   const { posts, loading, error } = usePosts();
   const isPostPage = window.location.pathname.startsWith('/post/');
@@ -594,6 +734,7 @@ function App() {
     <>
       <SideAdRails />
       {page}
+      <AdBlockGate isBlocked={isAdBlockDetected} />
     </>
   );
 }
