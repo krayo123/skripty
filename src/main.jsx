@@ -276,6 +276,7 @@ function AdStrip() {
       <IframeAdSlot ad={iframeAds.leaderboard} className="wideAd" />
       <IframeAdSlot ad={iframeAds.mobile} className="mobileAd" />
       <DirectAdLink />
+      <NativeAdSlot />
     </div>
   );
 }
