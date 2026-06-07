@@ -1,53 +1,88 @@
 body {
-  font-size: 15px !important;
+  font-size: 14px !important;
+}
+
+.pageShell {
+  padding-top: 18px !important;
+  padding-bottom: 56px !important;
 }
 
 .siteHeader {
-  min-height: 70px !important;
+  min-height: 62px !important;
+  padding: 9px 10px !important;
 }
 
 .logoLockup {
-  font-size: 0.98rem !important;
+  gap: 10px !important;
+  font-size: 0.92rem !important;
+}
+
+.brandMark,
+.brandLogo {
+  width: 42px !important;
+  height: 42px !important;
 }
 
 .navPills a {
-  min-height: 44px !important;
-  padding: 0 16px !important;
+  min-height: 40px !important;
+  padding: 0 13px !important;
+  font-size: 0.88rem !important;
 }
 
 .hero,
 .executorsHero {
-  min-height: 440px !important;
-  padding: 46px 4px 36px !important;
+  min-height: 360px !important;
+  padding: 32px 4px 28px !important;
+  gap: 24px !important;
 }
 
 .executorsHero {
-  min-height: 300px !important;
+  min-height: 240px !important;
 }
 
 .hero h1,
 .executorsHero h1 {
-  font-size: clamp(2.7rem, 6.1vw, 5.25rem) !important;
-  line-height: 0.96 !important;
+  font-size: clamp(2.25rem, 4.8vw, 4.2rem) !important;
+  line-height: 1 !important;
 }
 
 .executorsHero h1 {
-  font-size: clamp(2.45rem, 5.3vw, 4.6rem) !important;
+  font-size: clamp(2.05rem, 4.4vw, 3.75rem) !important;
 }
 
 .intro {
-  margin-top: 18px !important;
-  font-size: 1rem !important;
-  line-height: 1.55 !important;
+  margin-top: 14px !important;
+  font-size: 0.92rem !important;
+  line-height: 1.5 !important;
+}
+
+.eyebrow {
+  margin-bottom: 9px !important;
+  font-size: 0.7rem !important;
+}
+
+.consoleTop {
+  padding: 12px !important;
+}
+
+.consoleBody {
+  padding: 18px !important;
 }
 
 .consoleBody strong {
-  font-size: clamp(3.2rem, 8vw, 5.4rem) !important;
-  line-height: 0.95 !important;
+  font-size: clamp(2.6rem, 6vw, 4.4rem) !important;
+  line-height: 0.98 !important;
+}
+
+.consoleBody p,
+.consoleBody span {
+  font-size: 0.84rem !important;
 }
 
 .searchShell {
-  min-height: 56px !important;
+  min-height: 48px !important;
+  margin: 0 14px 14px !important;
+  padding: 0 14px !important;
 }
 
 .adSlot,
@@ -80,91 +115,178 @@ iframe.adSlot {
 }
 
 .directAdLink {
-  font-size: 0.94rem !important;
-  font-weight: 950 !important;
+  min-height: 52px !important;
+  font-size: 0.86rem !important;
+  font-weight: 900 !important;
+}
+
+.contentBand {
+  padding-top: 4px !important;
+}
+
+.sectionHeader {
+  gap: 14px !important;
+  margin-bottom: 16px !important;
 }
 
 .sectionHeader h2 {
-  font-size: clamp(1.6rem, 3.3vw, 3rem) !important;
-  line-height: 1.04 !important;
+  font-size: clamp(1.35rem, 2.65vw, 2.35rem) !important;
+  line-height: 1.08 !important;
+}
+
+.sectionHeader > span {
+  padding: 8px 11px !important;
+  font-size: 0.84rem !important;
 }
 
 .postGrid,
 .executorGrid {
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)) !important;
+  grid-template-columns: repeat(auto-fill, minmax(225px, 1fr)) !important;
+  gap: 14px !important;
 }
 
 .postCard {
-  min-height: 292px !important;
+  min-height: 258px !important;
+}
+
+.postCard:hover,
+.executorCard:hover {
+  transform: translateY(-3px) !important;
+}
+
+.playBadge {
+  right: 10px !important;
+  bottom: 10px !important;
+  width: 36px !important;
+  height: 36px !important;
+}
+
+.hotBadge {
+  left: 10px !important;
+  top: 10px !important;
+  min-height: 24px !important;
+  padding: 0 9px !important;
+  font-size: 0.72rem !important;
 }
 
 .postText {
-  gap: 14px !important;
-  padding: 16px !important;
+  gap: 11px !important;
+  padding: 13px !important;
 }
 
 .postText strong {
-  font-size: 0.96rem !important;
-  line-height: 1.32 !important;
+  font-size: 0.86rem !important;
+  line-height: 1.28 !important;
 }
 
 .postText span {
+  font-size: 0.82rem !important;
+  font-weight: 900 !important;
+}
+
+.statusPanel {
+  min-height: 58px !important;
+  margin: 14px 0 !important;
+  padding: 14px !important;
   font-size: 0.9rem !important;
-  font-weight: 950 !important;
 }
 
 .executorCard {
-  grid-template-rows: 184px 1fr !important;
-  min-height: 326px !important;
+  grid-template-rows: 150px 1fr !important;
+  min-height: 280px !important;
+}
+
+.executorPoster svg {
+  width: 3.9rem !important;
+  height: 3.9rem !important;
 }
 
 .executorPoster span {
-  font-size: 0.86rem !important;
-  font-weight: 950 !important;
+  left: 10px !important;
+  bottom: 10px !important;
+  padding: 6px 9px !important;
+  font-size: 0.78rem !important;
+  font-weight: 900 !important;
 }
 
 .executorBody {
-  gap: 16px !important;
-  padding: 18px !important;
+  gap: 13px !important;
+  padding: 14px !important;
 }
 
 .executorBody h2 {
-  font-size: 1.34rem !important;
+  font-size: 1.14rem !important;
   line-height: 1.12 !important;
 }
 
 .executorBody p {
-  font-size: 0.92rem !important;
+  font-size: 0.84rem !important;
 }
 
 .executorBody a,
 .lootButton {
-  min-height: 50px !important;
-  font-size: 0.95rem !important;
-  font-weight: 950 !important;
+  min-height: 44px !important;
+  font-size: 0.86rem !important;
+  font-weight: 900 !important;
+}
+
+.backLink {
+  min-height: 38px !important;
+  margin: 24px 0 16px !important;
+  font-size: 0.88rem !important;
+}
+
+.unlockPanel {
+  padding: 16px !important;
 }
 
 .unlockPanel h1 {
-  font-size: clamp(1.35rem, 2.8vw, 1.9rem) !important;
-  line-height: 1.12 !important;
+  font-size: clamp(1.18rem, 2.2vw, 1.6rem) !important;
+  line-height: 1.14 !important;
+}
+
+.unlockText,
+.unlockHint,
+.trustRow {
+  font-size: 0.88rem !important;
 }
 
 @media (max-width: 560px) {
+  .pageShell {
+    padding-top: 8px !important;
+  }
+
   .logoLockup {
-    font-size: 0.94rem !important;
+    font-size: 0.88rem !important;
+  }
+
+  .brandMark,
+  .brandLogo {
+    width: 38px !important;
+    height: 38px !important;
   }
 
   .navPills a {
-    font-size: 0.86rem !important;
+    min-height: 38px !important;
+    font-size: 0.8rem !important;
+  }
+
+  .hero,
+  .executorsHero {
+    padding-top: 28px !important;
   }
 
   .hero h1,
   .executorsHero h1 {
-    font-size: clamp(2.15rem, 12vw, 3.25rem) !important;
-    line-height: 1 !important;
+    font-size: clamp(1.8rem, 10vw, 2.7rem) !important;
+    line-height: 1.02 !important;
   }
 
   .intro {
-    font-size: 0.95rem !important;
+    font-size: 0.86rem !important;
+  }
+
+  .postText strong {
+    font-size: 0.84rem !important;
   }
 }
