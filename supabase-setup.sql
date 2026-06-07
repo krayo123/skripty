@@ -12,6 +12,31 @@ create table if not exists public.posts (
   created_at timestamptz not null default now()
 );
 
+alter table public.posts add column if not exists id uuid default gen_random_uuid();
+alter table public.posts add column if not exists "YoutubeLink" text;
+alter table public.posts add column if not exists "LootlabsLink" text;
+alter table public.posts add column if not exists title text;
+alter table public.posts add column if not exists thumbnail text;
+alter table public.posts add column if not exists created_at timestamptz;
+
+update public.posts set id = gen_random_uuid() where id is null;
+update public.posts set created_at = now() where created_at is null;
+
+alter table public.posts alter column id set default gen_random_uuid();
+alter table public.posts alter column created_at set default now();
+
+do $$
+begin
+  if not exists (
+    select 1
+    from pg_constraint
+    where conrelid = 'public.posts'::regclass
+      and contype = 'p'
+  ) then
+    alter table public.posts add constraint posts_pkey primary key (id);
+  end if;
+end $$;
+
 create table if not exists public.admin_users (
   email text primary key,
   created_at timestamptz not null default now()
