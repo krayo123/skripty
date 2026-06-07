@@ -1,0 +1,63 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="KrayoSkriptz Roblox scripts and executors hub">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#05070D"/>
+      <stop offset="0.56" stop-color="#080D18"/>
+      <stop offset="1" stop-color="#130318"/>
+    </linearGradient>
+    <linearGradient id="cyanPink" x1="140" y1="94" x2="1008" y2="544" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#9FFCFB"/>
+      <stop offset="0.45" stop-color="#2D7DFF"/>
+      <stop offset="1" stop-color="#FF2ACB"/>
+    </linearGradient>
+    <linearGradient id="lime" x1="733" y1="168" x2="1051" y2="490" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#D7FF4D"/>
+      <stop offset="1" stop-color="#63FF00"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="18" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.1 0 0 0 0 0.8 0 0 0 0 1 0 0 0 0.55 0"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <path d="M0 0H1200V630H0V0Z" fill="url(#bg)"/>
+  <path d="M104 0H158L48 630H0V365L104 0Z" fill="#00E0FF" opacity="0.16"/>
+  <path d="M1096 0H1200V630H1042L1096 0Z" fill="#FF2ACB" opacity="0.13"/>
+  <path d="M104 512C278 422 351 556 514 480C694 396 760 139 1074 128" stroke="url(#cyanPink)" stroke-width="3" opacity="0.38"/>
+  <path d="M108 558H1082" stroke="#23324D" stroke-width="2" opacity="0.78"/>
+
+  <rect x="74" y="70" width="1052" height="490" rx="34" fill="#08101D" opacity="0.92" stroke="#1C2A42" stroke-width="2"/>
+  <rect x="94" y="90" width="1012" height="450" rx="26" fill="#0B1220" stroke="url(#cyanPink)" stroke-opacity="0.52" stroke-width="2"/>
+
+  <g filter="url(#glow)">
+    <rect x="142" y="136" width="142" height="142" rx="30" fill="#071020" stroke="url(#cyanPink)" stroke-width="5"/>
+    <path d="M170 166H203V222L260 166H302L240 231L308 306H264L203 243V306H170V166Z" fill="#9FFCFB"/>
+    <path d="M248 178H328L311 212H261L249 226L264 238H309C327 238 340 250 340 268C340 279 335 289 326 297L308 306H226L243 272H300L313 261L298 252H255C236 252 223 240 223 222C223 212 228 201 237 194L248 178Z" fill="#FF2ACB"/>
+    <path d="M335 144L318 188L351 164L329 214L394 138L354 163L367 119L335 144Z" fill="url(#lime)"/>
+  </g>
+
+  <text x="142" y="360" fill="#9FFCFB" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="24" font-weight="900" letter-spacing="4">ROBLOX SCRIPTS HUB</text>
+  <text x="142" y="427" fill="#FFFFFF" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="70" font-weight="900">KrayoSkriptz</text>
+  <text x="146" y="478" fill="#C9D3E1" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="28" font-weight="600">Fresh scripts, gameplay previews, Lootlabs unlocks and executor downloads.</text>
+
+  <g transform="translate(742 184)">
+    <rect width="278" height="58" rx="14" fill="#101A2C" stroke="#223858"/>
+    <circle cx="34" cy="29" r="10" fill="#9DFF57"/>
+    <text x="58" y="38" fill="#FFFFFF" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="21" font-weight="800">Latest script drops</text>
+  </g>
+  <g transform="translate(782 274)">
+    <rect width="264" height="58" rx="14" fill="#101A2C" stroke="#223858"/>
+    <circle cx="34" cy="29" r="10" fill="#00E0FF"/>
+    <text x="58" y="38" fill="#FFFFFF" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="21" font-weight="800">Executor downloads</text>
+  </g>
+  <g transform="translate(726 364)">
+    <rect width="300" height="58" rx="14" fill="#101A2C" stroke="#223858"/>
+    <circle cx="34" cy="29" r="10" fill="#FF2ACB"/>
+    <text x="58" y="38" fill="#FFFFFF" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="21" font-weight="800">Fast video previews</text>
+  </g>
+</svg>
