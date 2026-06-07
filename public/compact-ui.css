@@ -251,6 +251,26 @@ iframe.adSlot {
   font-size: 0.88rem !important;
 }
 
+.legalFooter {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  padding: 18px 16px 28px;
+  color: #8f9bb0;
+  font-size: 0.78rem;
+}
+
+.legalFooter a {
+  color: #9ffcff;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.legalFooter a:hover {
+  color: #ffffff;
+}
+
 @media (min-width: 1180px) and (max-width: 1599px) {
   .pageShell {
     width: min(1080px, calc(100% - 296px)) !important;
