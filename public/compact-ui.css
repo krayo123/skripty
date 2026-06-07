@@ -251,6 +251,57 @@ iframe.adSlot {
   font-size: 0.88rem !important;
 }
 
+@media (min-width: 1180px) and (max-width: 1599px) {
+  .pageShell {
+    width: min(1080px, calc(100% - 296px)) !important;
+  }
+
+  .sideAdRail {
+    display: flex !important;
+    top: 84px !important;
+    gap: 10px !important;
+    z-index: 7 !important;
+  }
+
+  .leftRail {
+    left: 10px !important;
+  }
+
+  .rightRail {
+    right: 10px !important;
+  }
+
+  .sideAdRail .adSlot {
+    transform: scale(0.82) !important;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.34) !important;
+  }
+
+  .leftRail .adSlot {
+    transform-origin: top left !important;
+  }
+
+  .rightRail .adSlot {
+    transform-origin: top right !important;
+  }
+}
+
+@media (min-width: 1600px) {
+  .sideAdRail {
+    display: flex !important;
+    top: 92px !important;
+  }
+}
+
+@media (max-height: 780px) and (min-width: 1180px) {
+  .sideAdRail {
+    top: 72px !important;
+  }
+
+  .sideAdRail .adSlot {
+    transform: scale(0.74) !important;
+  }
+}
+
 @media (max-width: 560px) {
   .pageShell {
     padding-top: 8px !important;
