@@ -1,0 +1,646 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#05080d" />
+    <title>Admin | KrayoSkriptz</title>
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #05080d;
+        --panel: #0b1019;
+        --panel-2: #111827;
+        --line: rgba(255, 255, 255, 0.12);
+        --text: #f7fbff;
+        --muted: #a7b2c4;
+        --accent: #30f3ff;
+        --hot: #ff2a8d;
+        --ok: #6dffad;
+        --warn: #ffd166;
+        --bad: #ff6b8a;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background:
+          radial-gradient(circle at 8% 0%, rgba(48, 243, 255, 0.14), transparent 28%),
+          radial-gradient(circle at 92% 10%, rgba(255, 42, 141, 0.14), transparent 32%),
+          var(--bg);
+        color: var(--text);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font-size: 14px;
+      }
+
+      a {
+        color: var(--accent);
+        font-weight: 800;
+        text-decoration: none;
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      .wrap {
+        width: min(1180px, calc(100% - 28px));
+        margin: 0 auto;
+        padding: 22px 0 48px;
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 18px;
+        padding: 12px 14px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: rgba(11, 16, 25, 0.86);
+        backdrop-filter: blur(16px);
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--text);
+        font-size: 0.98rem;
+      }
+
+      .brand img {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+      }
+
+      nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 8px;
+      }
+
+      nav a,
+      .ghostButton {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 36px;
+        padding: 0 12px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.035);
+        color: #d7e2f2;
+        font-size: 0.84rem;
+        font-weight: 850;
+      }
+
+      .hero,
+      .panel {
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: rgba(11, 16, 25, 0.9);
+        box-shadow: 0 20px 80px rgba(0, 0, 0, 0.28);
+      }
+
+      .hero {
+        display: grid;
+        gap: 14px;
+        margin-bottom: 16px;
+        padding: clamp(20px, 4vw, 34px);
+      }
+
+      h1,
+      h2 {
+        margin: 0;
+        line-height: 1.04;
+      }
+
+      h1 {
+        font-size: clamp(2rem, 4.8vw, 4rem);
+      }
+
+      h2 {
+        font-size: 1.1rem;
+      }
+
+      p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.55;
+      }
+
+      .statusRow {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .statusBox {
+        min-height: 76px;
+        padding: 14px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.04);
+      }
+
+      .statusBox span {
+        display: block;
+        margin-bottom: 6px;
+        color: var(--muted);
+        font-size: 0.72rem;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .statusBox strong {
+        color: #ffffff;
+        font-size: 0.96rem;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: minmax(260px, 0.8fr) minmax(320px, 1.2fr);
+        gap: 16px;
+      }
+
+      .panel {
+        padding: 18px;
+      }
+
+      .stack {
+        display: grid;
+        gap: 12px;
+      }
+
+      label {
+        display: grid;
+        gap: 7px;
+        color: #e8f1ff;
+        font-size: 0.82rem;
+        font-weight: 900;
+      }
+
+      input {
+        width: 100%;
+        min-height: 44px;
+        padding: 0 12px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: #080d15;
+        color: var(--text);
+        outline: none;
+      }
+
+      input:focus {
+        border-color: rgba(48, 243, 255, 0.56);
+        box-shadow: 0 0 0 3px rgba(48, 243, 255, 0.12);
+      }
+
+      .primaryButton,
+      .dangerButton {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        padding: 0 14px;
+        border: 1px solid transparent;
+        border-radius: 10px;
+        color: #ffffff;
+        cursor: pointer;
+        font-weight: 950;
+      }
+
+      .primaryButton {
+        background: linear-gradient(135deg, rgba(48, 243, 255, 0.3), rgba(255, 42, 141, 0.32));
+        border-color: rgba(48, 243, 255, 0.26);
+      }
+
+      .dangerButton {
+        min-height: 34px;
+        background: rgba(255, 107, 138, 0.12);
+        border-color: rgba(255, 107, 138, 0.3);
+        color: #ffdce4;
+        font-size: 0.78rem;
+      }
+
+      button:disabled,
+      input:disabled {
+        cursor: not-allowed;
+        opacity: 0.54;
+      }
+
+      .message {
+        min-height: 42px;
+        padding: 11px 12px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.035);
+        color: var(--muted);
+        line-height: 1.45;
+      }
+
+      .message.ok {
+        border-color: rgba(109, 255, 173, 0.28);
+        color: var(--ok);
+      }
+
+      .message.warn {
+        border-color: rgba(255, 209, 102, 0.28);
+        color: var(--warn);
+      }
+
+      .message.bad {
+        border-color: rgba(255, 107, 138, 0.32);
+        color: var(--bad);
+      }
+
+      .posts {
+        display: grid;
+        gap: 10px;
+        margin-top: 14px;
+      }
+
+      .postItem {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 12px;
+        align-items: center;
+        padding: 12px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.035);
+      }
+
+      .postItem strong {
+        display: block;
+        margin-bottom: 4px;
+        color: #ffffff;
+        font-size: 0.88rem;
+        line-height: 1.35;
+      }
+
+      .postItem span {
+        display: block;
+        color: var(--muted);
+        font-size: 0.76rem;
+        word-break: break-all;
+      }
+
+      ol {
+        margin: 12px 0 0;
+        padding-left: 18px;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      code {
+        color: #dffcff;
+        font-size: 0.86em;
+      }
+
+      @media (max-width: 860px) {
+        .grid,
+        .statusRow {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <a class="brand" href="/">
+          <img src="/logo.svg" alt="KrayoSkriptz logo" />
+          <strong>KrayoSkriptz Admin</strong>
+        </a>
+        <nav aria-label="Admin navigation">
+          <a href="/">Home</a>
+          <a href="/ad-test/">Ad Test</a>
+          <a href="/privacy/">Privacy</a>
+        </nav>
+      </header>
+
+      <section class="hero">
+        <h1>Admin panel</h1>
+        <p>Check Supabase, sign in with your admin account, and add new script posts without editing code.</p>
+        <div class="statusRow">
+          <div class="statusBox">
+            <span>Database</span>
+            <strong id="dbStatus">Checking...</strong>
+          </div>
+          <div class="statusBox">
+            <span>Posts</span>
+            <strong id="postCount">-</strong>
+          </div>
+          <div class="statusBox">
+            <span>Session</span>
+            <strong id="sessionStatus">Checking...</strong>
+          </div>
+        </div>
+      </section>
+
+      <main class="grid">
+        <div class="stack">
+          <section class="panel stack">
+            <h2>Sign in</h2>
+            <form id="loginForm" class="stack">
+              <label>
+                Email
+                <input id="email" type="email" autocomplete="email" required />
+              </label>
+              <label>
+                Password
+                <input id="password" type="password" autocomplete="current-password" required />
+              </label>
+              <button class="primaryButton" type="submit">Sign in</button>
+              <button class="ghostButton" id="logoutButton" type="button">Sign out</button>
+            </form>
+            <div class="message" id="authMessage">Create a Supabase Auth user, then add that email in supabase-setup.sql.</div>
+          </section>
+
+          <section class="panel">
+            <h2>Setup checklist</h2>
+            <ol>
+              <li>Open Supabase SQL Editor and run <code>supabase-setup.sql</code> from this repo.</li>
+              <li>Create your user in Supabase Authentication.</li>
+              <li>Run the final commented SQL line with your real admin email.</li>
+              <li>Come back here, sign in, and add posts.</li>
+            </ol>
+          </section>
+        </div>
+
+        <div class="stack">
+          <section class="panel stack">
+            <h2>Add post</h2>
+            <form id="postForm" class="stack">
+              <label>
+                YouTube link
+                <input id="youtubeLink" type="url" placeholder="https://www.youtube.com/watch?v=..." required />
+              </label>
+              <label>
+                Lootlabs link
+                <input id="lootlabsLink" type="url" placeholder="https://lootlabs.gg/..." required />
+              </label>
+              <label>
+                Optional title
+                <input id="title" type="text" maxlength="180" placeholder="Leave empty to let the site use video data" />
+              </label>
+              <label>
+                Optional thumbnail URL
+                <input id="thumbnail" type="url" placeholder="https://..." />
+              </label>
+              <button class="primaryButton" type="submit">Add post</button>
+            </form>
+            <div class="message" id="postMessage">Sign in to add posts.</div>
+          </section>
+
+          <section class="panel">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+              <h2>Recent posts</h2>
+              <button class="ghostButton" id="refreshButton" type="button">Refresh</button>
+            </div>
+            <div class="posts" id="posts"></div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <script type="module">
+      import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.4';
+
+      const SUPABASE_URL = 'https://vwiwgbvtkjyerqpjbkfc.supabase.co';
+      const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3aXdnYnZ0a2p5ZXJxcGpia2ZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1OTg5NjIsImV4cCI6MjA5NjE3NDk2Mn0.uqMgkZTVOm0NmU54HSlQe33BeAfYxFPj5xzA_IfsXB8';
+
+      const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        auth: {
+          autoRefreshToken: true,
+          persistSession: true
+        }
+      });
+
+      const dbStatus = document.getElementById('dbStatus');
+      const postCount = document.getElementById('postCount');
+      const sessionStatus = document.getElementById('sessionStatus');
+      const loginForm = document.getElementById('loginForm');
+      const logoutButton = document.getElementById('logoutButton');
+      const authMessage = document.getElementById('authMessage');
+      const postForm = document.getElementById('postForm');
+      const postMessage = document.getElementById('postMessage');
+      const postsEl = document.getElementById('posts');
+      const refreshButton = document.getElementById('refreshButton');
+
+      function setMessage(element, text, type = '') {
+        element.className = `message ${type}`.trim();
+        element.textContent = text;
+      }
+
+      function escapeHtml(value) {
+        return String(value || '').replace(/[&<>'"]/g, (char) => ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          "'": '&#39;',
+          '"': '&quot;'
+        })[char]);
+      }
+
+      function formatDate(value) {
+        if (!value) {
+          return 'no date';
+        }
+
+        const date = new Date(value);
+        return Number.isNaN(date.getTime()) ? 'no date' : date.toLocaleString();
+      }
+
+      function setFormState(session) {
+        const signedIn = Boolean(session?.user?.email);
+        sessionStatus.textContent = signedIn ? session.user.email : 'Not signed in';
+        logoutButton.disabled = !signedIn;
+        postForm.querySelectorAll('input, button').forEach((element) => {
+          element.disabled = !signedIn;
+        });
+      }
+
+      async function checkDatabase() {
+        const { count, error } = await supabase
+          .from('posts')
+          .select('id', { count: 'exact', head: true });
+
+        if (error) {
+          dbStatus.textContent = 'Needs setup';
+          postCount.textContent = '-';
+          setMessage(postMessage, `Supabase error: ${error.message}`, 'bad');
+          return;
+        }
+
+        dbStatus.textContent = 'Connected';
+        postCount.textContent = `${count ?? 0}`;
+      }
+
+      async function queryPosts() {
+        const selects = [
+          'id,YoutubeLink,LootlabsLink,title,thumbnail,created_at',
+          'id,YoutubeLink,LootlabsLink,created_at',
+          'id,YoutubeLink,LootlabsLink'
+        ];
+        let lastError = null;
+
+        for (const select of selects) {
+          let query = supabase.from('posts').select(select).limit(12);
+
+          if (select.includes('created_at')) {
+            query = query.order('created_at', { ascending: false });
+          }
+
+          const { data, error } = await query;
+
+          if (!error) {
+            return { data: data || [], error: null };
+          }
+
+          lastError = error;
+        }
+
+        return { data: [], error: lastError };
+      }
+
+      async function loadPosts() {
+        postsEl.innerHTML = '<div class="message">Loading posts...</div>';
+        const { data, error } = await queryPosts();
+
+        if (error) {
+          postsEl.innerHTML = `<div class="message bad">${escapeHtml(error.message)}</div>`;
+          return;
+        }
+
+        if (!data.length) {
+          postsEl.innerHTML = '<div class="message warn">No posts found yet.</div>';
+          return;
+        }
+
+        postsEl.innerHTML = data.map((post) => {
+          const title = post.title || post.YoutubeLink || 'Untitled post';
+          const lootlabs = post.LootlabsLink || 'No Lootlabs link';
+          const createdAt = formatDate(post.created_at);
+
+          return `
+            <article class="postItem">
+              <div>
+                <strong>${escapeHtml(title)}</strong>
+                <span>${escapeHtml(lootlabs)}</span>
+                <span>${escapeHtml(createdAt)}</span>
+              </div>
+              <button class="dangerButton" type="button" data-delete="${escapeHtml(post.id)}">Delete</button>
+            </article>
+          `;
+        }).join('');
+      }
+
+      loginForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        setMessage(authMessage, 'Signing in...');
+
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+
+        if (error) {
+          setMessage(authMessage, error.message, 'bad');
+          return;
+        }
+
+        setMessage(authMessage, 'Signed in.', 'ok');
+        await checkDatabase();
+        await loadPosts();
+      });
+
+      logoutButton.addEventListener('click', async () => {
+        await supabase.auth.signOut();
+        setMessage(authMessage, 'Signed out.', 'warn');
+      });
+
+      postForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        setMessage(postMessage, 'Adding post...');
+
+        const payload = {
+          YoutubeLink: document.getElementById('youtubeLink').value.trim(),
+          LootlabsLink: document.getElementById('lootlabsLink').value.trim()
+        };
+        const title = document.getElementById('title').value.trim();
+        const thumbnail = document.getElementById('thumbnail').value.trim();
+
+        if (title) {
+          payload.title = title;
+        }
+
+        if (thumbnail) {
+          payload.thumbnail = thumbnail;
+        }
+
+        const { error } = await supabase.from('posts').insert(payload);
+
+        if (error) {
+          setMessage(postMessage, error.message, 'bad');
+          return;
+        }
+
+        postForm.reset();
+        setMessage(postMessage, 'Post added.', 'ok');
+        await checkDatabase();
+        await loadPosts();
+      });
+
+      postsEl.addEventListener('click', async (event) => {
+        const button = event.target.closest('[data-delete]');
+
+        if (!button) {
+          return;
+        }
+
+        const id = button.getAttribute('data-delete');
+        button.disabled = true;
+        button.textContent = 'Deleting...';
+        const { error } = await supabase.from('posts').delete().eq('id', id);
+
+        if (error) {
+          setMessage(postMessage, error.message, 'bad');
+          button.disabled = false;
+          button.textContent = 'Delete';
+          return;
+        }
+
+        setMessage(postMessage, 'Post deleted.', 'ok');
+        await checkDatabase();
+        await loadPosts();
+      });
+
+      refreshButton.addEventListener('click', async () => {
+        await checkDatabase();
+        await loadPosts();
+      });
+
+      supabase.auth.onAuthStateChange((event, session) => {
+        setFormState(session);
+      });
+
+      const { data: sessionData } = await supabase.auth.getSession();
+      setFormState(sessionData.session);
+      await checkDatabase();
+      await loadPosts();
+    </script>
+  </body>
+</html>

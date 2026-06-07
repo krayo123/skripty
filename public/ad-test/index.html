@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#05080d" />
+    <title>Ad Test | KrayoSkriptz</title>
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #05080d;
+        --panel: #0b1019;
+        --line: rgba(255, 255, 255, 0.12);
+        --text: #f7fbff;
+        --muted: #a7b2c4;
+        --accent: #30f3ff;
+        --hot: #ff2a8d;
+        --ok: #6dffad;
+        --warn: #ffd166;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background:
+          radial-gradient(circle at 6% 0%, rgba(48, 243, 255, 0.14), transparent 28%),
+          radial-gradient(circle at 94% 12%, rgba(255, 42, 141, 0.14), transparent 32%),
+          var(--bg);
+        color: var(--text);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font-size: 14px;
+      }
+
+      a {
+        color: var(--accent);
+        font-weight: 850;
+        text-decoration: none;
+      }
+
+      .wrap {
+        width: min(1240px, calc(100% - 28px));
+        margin: 0 auto;
+        padding: 22px 0 52px;
+      }
+
+      header,
+      .hero,
+      .card {
+        border: 1px solid var(--line);
+        background: rgba(11, 16, 25, 0.88);
+        backdrop-filter: blur(16px);
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 18px;
+        padding: 12px 14px;
+        border-radius: 14px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--text);
+        font-size: 0.98rem;
+      }
+
+      .brand img {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+      }
+
+      nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 8px;
+      }
+
+      nav a,
+      .directLink {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 36px;
+        padding: 0 12px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        color: #d7e2f2;
+        font-size: 0.84rem;
+      }
+
+      .hero {
+        display: grid;
+        gap: 12px;
+        margin-bottom: 16px;
+        padding: clamp(20px, 4vw, 34px);
+        border-radius: 16px;
+      }
+
+      h1,
+      h2 {
+        margin: 0;
+        line-height: 1.04;
+      }
+
+      h1 {
+        font-size: clamp(2rem, 4.8vw, 4rem);
+      }
+
+      h2 {
+        font-size: 1rem;
+      }
+
+      p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.55;
+      }
+
+      .status {
+        min-height: 44px;
+        padding: 12px 14px;
+        border: 1px solid rgba(48, 243, 255, 0.24);
+        border-radius: 12px;
+        background: rgba(48, 243, 255, 0.08);
+        color: #dffcff;
+        font-weight: 800;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 14px;
+      }
+
+      .card {
+        display: grid;
+        gap: 12px;
+        min-width: 0;
+        padding: 14px;
+        border-radius: 14px;
+      }
+
+      .cardHeader {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .cardHeader span {
+        color: var(--muted);
+        font-size: 0.76rem;
+        font-weight: 900;
+      }
+
+      .frameWrap {
+        display: grid;
+        place-items: center;
+        min-height: min(var(--frame-height), 620px);
+        overflow: auto;
+        padding: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        background:
+          linear-gradient(135deg, rgba(48, 243, 255, 0.08), transparent 45%),
+          linear-gradient(315deg, rgba(255, 42, 141, 0.08), transparent 45%),
+          #070b12;
+      }
+
+      iframe {
+        display: block;
+        width: min(100%, var(--frame-width));
+        height: var(--frame-height);
+        border: 0;
+        border-radius: 8px;
+        background: #070b12;
+        color-scheme: dark;
+      }
+
+      .directCard {
+        grid-column: 1 / -1;
+      }
+
+      .directLink {
+        min-height: 46px;
+        width: fit-content;
+        padding: 0 18px;
+        border-color: rgba(255, 42, 141, 0.42);
+        background: rgba(255, 42, 141, 0.12);
+        color: #ffffff;
+        font-weight: 950;
+      }
+
+      .ok {
+        color: var(--ok);
+      }
+
+      .warn {
+        color: var(--warn);
+      }
+
+      @media (min-width: 1040px) {
+        .wide {
+          grid-column: span 2;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <a class="brand" href="/">
+          <img src="/logo.svg" alt="KrayoSkriptz logo" />
+          <strong>KrayoSkriptz</strong>
+        </a>
+        <nav aria-label="Ad test navigation">
+          <a href="/">Home</a>
+          <a href="/admin/">Admin</a>
+          <a href="/privacy/">Privacy</a>
+        </nav>
+      </header>
+
+      <section class="hero">
+        <h1>Ad test</h1>
+        <p>Live checks for the ad codes used by the project. Empty or blocked frames usually mean AdBlock, browser privacy filtering, no ad fill, or a network-side limit.</p>
+        <div class="status" id="status">Starting ad checks...</div>
+      </section>
+
+      <main class="grid" id="grid">
+        <section class="card directCard">
+          <div class="cardHeader">
+            <h2>Direct link</h2>
+            <span>opens in new tab</span>
+          </div>
+          <a class="directLink" href="https://www.effectivecpmnetwork.com/zpgbszxrzc?key=d1ab8a6a326be7a2a730e58642a92eb3" target="_blank" rel="noreferrer">Open direct ad link</a>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      const displaySlots = [
+        { id: 'leaderboard', title: 'Leaderboard', width: 728, height: 90, key: '27cbf4ff895d33adda60467b0a6419ae', wide: true },
+        { id: 'banner', title: 'Banner', width: 468, height: 60, key: 'c9c26ab9e39ba477671b272bce2494eb' },
+        { id: 'mobile', title: 'Mobile banner', width: 320, height: 50, key: '65d65154be3174f30f7b3b767e09d31b' },
+        { id: 'rectangle', title: 'Rectangle', width: 300, height: 250, key: 'a0ec8512eb15caafae71c26a5a7aa1cb' },
+        { id: 'skyscraper', title: 'Skyscraper', width: 160, height: 300, key: '110512ebb009dc7a5a3cdb35e6da553a' },
+        { id: 'tall-skyscraper', title: 'Tall skyscraper', width: 160, height: 600, key: '75952d1ada641b0b480dfaf794dbe2cd' }
+      ];
+
+      const scriptSlots = [
+        {
+          id: 'native',
+          title: 'Native block',
+          width: 330,
+          height: 280,
+          html: '<script async="async" data-cfasync="false" src="https://pl29649395.effectivecpmnetwork.com/62357ec70029d873daedb66eb2cfbba5/invoke.js"><\/script><div id="container-62357ec70029d873daedb66eb2cfbba5"></div>'
+        },
+        {
+          id: 'script-a',
+          title: 'Script tag A',
+          width: 330,
+          height: 170,
+          html: '<script src="https://pl29649394.effectivecpmnetwork.com/f9/1d/0e/f91d0efc66ef091f9b1eeb1b998ad40f.js"><\/script>'
+        },
+        {
+          id: 'script-b',
+          title: 'Script tag B',
+          width: 330,
+          height: 170,
+          html: '<script src="https://pl29649398.effectivecpmnetwork.com/14/2b/fc/142bfc32c774f5f87f5ea53d57e6c397.js"><\/script>'
+        }
+      ];
+
+      const grid = document.getElementById('grid');
+      const status = document.getElementById('status');
+
+      function makeCard(slot) {
+        const card = document.createElement('section');
+        card.className = `card ${slot.wide ? 'wide' : ''}`.trim();
+        card.style.setProperty('--frame-width', `${slot.width}px`);
+        card.style.setProperty('--frame-height', `${slot.height}px`);
+        card.innerHTML = `
+          <div class="cardHeader">
+            <h2>${slot.title}</h2>
+            <span>${slot.width}x${slot.height}</span>
+          </div>
+          <div class="frameWrap">
+            <iframe title="${slot.title}" loading="lazy" sandbox="allow-scripts allow-popups allow-forms allow-same-origin"></iframe>
+          </div>
+        `;
+        const frame = card.querySelector('iframe');
+        frame.addEventListener('load', () => {
+          frame.dataset.loaded = 'yes';
+        });
+        return { card, frame };
+      }
+
+      function adFrameSource(slot) {
+        return `<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <style>
+      html, body {
+        width: 100%;
+        min-height: 100%;
+        margin: 0;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+        background: #070b12;
+        color-scheme: dark;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      atOptions = {
+        key: '${slot.key}',
+        format: 'iframe',
+        height: ${slot.height},
+        width: ${slot.width},
+        params: {}
+      };
+    <\/script>
+    <script src="https://www.highperformanceformat.com/${slot.key}/invoke.js"><\/script>
+  </body>
+</html>`;
+      }
+
+      function scriptFrameSource(slot) {
+        return `<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <style>
+      html, body {
+        width: 100%;
+        min-height: 100%;
+        margin: 0;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+        background: #070b12;
+        color-scheme: dark;
+      }
+    </style>
+  </head>
+  <body>${slot.html}</body>
+</html>`;
+      }
+
+      for (const slot of displaySlots) {
+        const { card, frame } = makeCard(slot);
+        grid.appendChild(card);
+        frame.srcdoc = adFrameSource(slot);
+      }
+
+      for (const slot of scriptSlots) {
+        const { card, frame } = makeCard(slot);
+        grid.appendChild(card);
+        frame.srcdoc = scriptFrameSource(slot);
+      }
+
+      window.setTimeout(() => {
+        const frames = [...document.querySelectorAll('iframe')];
+        const loaded = frames.filter((frame) => frame.dataset.loaded === 'yes').length;
+
+        if (loaded === 0) {
+          status.innerHTML = '<span class="warn">No ad frames loaded.</span> Check AdBlock, Brave Shields, browser filtering, or the ad network status.';
+          return;
+        }
+
+        status.innerHTML = `<span class="ok">${loaded}/${frames.length} frames loaded.</span> If a loaded frame is still empty, the ad network may have no fill for this visit or region.`;
+      }, 5000);
+    </script>
+  </body>
+</html>
