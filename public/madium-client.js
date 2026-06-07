@@ -8,6 +8,10 @@
     const style = document.createElement('style');
     style.id = 'madium-client-styles';
     style.textContent = `
+      .executorCard.hasMadiumPreview {
+        cursor: pointer;
+      }
+
       .executorCard.hasMadiumPreview .executorPoster {
         background: #050814;
       }
@@ -40,6 +44,30 @@
     document.head.appendChild(style);
   }
 
+  function openMadium() {
+    window.open(madiumDownloadUrl, '_blank', 'noopener,noreferrer');
+  }
+
+  function bindMadiumCardClick(card) {
+    if (card.dataset.madiumClickBound === 'true') return;
+
+    card.dataset.madiumClickBound = 'true';
+    card.tabIndex = 0;
+    card.setAttribute('role', 'link');
+    card.setAttribute('aria-label', 'Download Madium executor');
+
+    card.addEventListener('click', (event) => {
+      if (event.target.closest('a')) return;
+      openMadium();
+    });
+
+    card.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+      event.preventDefault();
+      openMadium();
+    });
+  }
+
   function patchMadiumCard() {
     injectMadiumStyles();
 
@@ -48,6 +76,7 @@
       if (title !== 'madium') return;
 
       card.classList.add('hasMadiumPreview');
+      bindMadiumCardClick(card);
 
       const poster = card.querySelector('.executorPoster');
       if (poster && !poster.querySelector('[data-madium-preview]')) {
