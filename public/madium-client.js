@@ -1,6 +1,8 @@
 (() => {
   const madiumDownloadUrl = 'https://filerift.com/file/w3Zpjdoc10';
   const madiumPreviewUrl = 'https://madium.net/assets/images/ss-home.png';
+  let observer;
+  let observerTimer;
 
   function injectMadiumStyles() {
     if (document.getElementById('madium-client-styles')) return;
@@ -44,6 +46,12 @@
     document.head.appendChild(style);
   }
 
+  function getMadiumCard(target) {
+    const card = target?.closest?.('.executorCard');
+    const title = card?.querySelector('.executorBody h2')?.textContent?.trim().toLowerCase();
+    return title === 'madium' ? card : null;
+  }
+
   function openMadium() {
     window.open(madiumDownloadUrl, '_blank', 'noopener,noreferrer');
   }
@@ -56,11 +64,6 @@
     card.setAttribute('role', 'link');
     card.setAttribute('aria-label', 'Download Madium executor');
 
-    card.addEventListener('click', (event) => {
-      if (event.target.closest('a')) return;
-      openMadium();
-    });
-
     card.addEventListener('keydown', (event) => {
       if (event.key !== 'Enter' && event.key !== ' ') return;
       event.preventDefault();
@@ -70,11 +73,13 @@
 
   function patchMadiumCard() {
     injectMadiumStyles();
+    let patched = false;
 
     document.querySelectorAll('.executorCard').forEach((card) => {
       const title = card.querySelector('.executorBody h2')?.textContent?.trim().toLowerCase();
       if (title !== 'madium') return;
 
+      patched = true;
       card.classList.add('hasMadiumPreview');
       bindMadiumCardClick(card);
 
@@ -83,7 +88,7 @@
         const image = document.createElement('img');
         image.src = madiumPreviewUrl;
         image.alt = '';
-        image.loading = 'lazy';
+        image.loading = 'eager';
         image.dataset.madiumPreview = 'true';
         poster.prepend(image);
       }
@@ -98,27 +103,52 @@
 
       const link = card.querySelector('.executorBody a');
       if (link) {
-        if (link.href !== madiumDownloadUrl) link.href = madiumDownloadUrl;
+        link.href = madiumDownloadUrl;
         link.target = '_blank';
         link.rel = 'noopener noreferrer';
       }
     });
+
+    return patched;
   }
 
-  function schedulePatch() {
-    requestAnimationFrame(patchMadiumCard);
-    window.setTimeout(patchMadiumCard, 250);
-    window.setTimeout(patchMadiumCard, 900);
+  function stopWatching() {
+    observer?.disconnect();
+    observer = undefined;
+    if (observerTimer) window.clearTimeout(observerTimer);
+    observerTimer = undefined;
   }
 
-  function patchExecutorsPage() {
-    if (window.location.pathname.includes('executors')) schedulePatch();
+  function watchForMadiumCard() {
+    stopWatching();
+    if (!window.location.pathname.includes('executors')) return;
+    if (patchMadiumCard()) return;
+
+    observer = new MutationObserver(() => {
+      if (patchMadiumCard()) stopWatching();
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+    observerTimer = window.setTimeout(stopWatching, 15000);
   }
 
   function start() {
-    patchExecutorsPage();
-    document.addEventListener('click', () => window.setTimeout(patchExecutorsPage, 80));
-    window.addEventListener('popstate', () => window.setTimeout(patchExecutorsPage, 80));
+    document.addEventListener(
+      'click',
+      (event) => {
+        const card = getMadiumCard(event.target);
+        if (!card) return;
+
+        event.preventDefault();
+        event.stopPropagation();
+        patchMadiumCard();
+        openMadium();
+      },
+      true,
+    );
+
+    watchForMadiumCard();
+    window.setTimeout(watchForMadiumCard, 600);
+    window.addEventListener('popstate', () => window.setTimeout(watchForMadiumCard, 80));
   }
 
   if (document.readyState === 'loading') {
