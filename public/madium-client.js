@@ -60,25 +60,36 @@
       }
 
       const badge = poster?.querySelector('span');
-      if (badge) badge.textContent = 'Free';
+      if (badge && badge.textContent.trim() !== 'Free') badge.textContent = 'Free';
 
       const tone = card.querySelector('.executorBody p');
-      if (tone) tone.textContent = 'Free executor client download';
+      if (tone && tone.textContent !== 'Free executor client download') {
+        tone.textContent = 'Free executor client download';
+      }
 
       const link = card.querySelector('.executorBody a');
       if (link) {
-        link.href = madiumDownloadUrl;
+        if (link.href !== madiumDownloadUrl) link.href = madiumDownloadUrl;
         link.target = '_blank';
         link.rel = 'noopener noreferrer';
       }
     });
   }
 
-  const observer = new MutationObserver(patchMadiumCard);
+  function schedulePatch() {
+    requestAnimationFrame(patchMadiumCard);
+    window.setTimeout(patchMadiumCard, 250);
+    window.setTimeout(patchMadiumCard, 900);
+  }
+
+  function patchExecutorsPage() {
+    if (window.location.pathname.includes('executors')) schedulePatch();
+  }
 
   function start() {
-    patchMadiumCard();
-    observer.observe(document.body, { childList: true, subtree: true });
+    patchExecutorsPage();
+    document.addEventListener('click', () => window.setTimeout(patchExecutorsPage, 80));
+    window.addEventListener('popstate', () => window.setTimeout(patchExecutorsPage, 80));
   }
 
   if (document.readyState === 'loading') {
