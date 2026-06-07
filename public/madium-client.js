@@ -1,6 +1,7 @@
 (() => {
   const madiumDownloadUrl = 'https://filerift.com/file/w3Zpjdoc10';
-  const madiumPreviewUrl = 'https://madium.net/assets/images/ss-home.png';
+  const madiumPreviewUrl = 'https://img.youtube.com/vi/Ds3tkKpDuiU/maxresdefault.jpg';
+  const madiumPreviewFallbackUrl = 'https://img.youtube.com/vi/Ds3tkKpDuiU/hqdefault.jpg';
   let observer;
   let observerTimer;
 
@@ -90,6 +91,9 @@
         image.alt = '';
         image.loading = 'eager';
         image.dataset.madiumPreview = 'true';
+        image.addEventListener('error', () => {
+          if (image.src !== madiumPreviewFallbackUrl) image.src = madiumPreviewFallbackUrl;
+        });
         poster.prepend(image);
       }
 
