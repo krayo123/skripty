@@ -1,0 +1,170 @@
+body {
+  font-size: 15px !important;
+}
+
+.siteHeader {
+  min-height: 70px !important;
+}
+
+.logoLockup {
+  font-size: 0.98rem !important;
+}
+
+.navPills a {
+  min-height: 44px !important;
+  padding: 0 16px !important;
+}
+
+.hero,
+.executorsHero {
+  min-height: 440px !important;
+  padding: 46px 4px 36px !important;
+}
+
+.executorsHero {
+  min-height: 300px !important;
+}
+
+.hero h1,
+.executorsHero h1 {
+  font-size: clamp(2.7rem, 6.1vw, 5.25rem) !important;
+  line-height: 0.96 !important;
+}
+
+.executorsHero h1 {
+  font-size: clamp(2.45rem, 5.3vw, 4.6rem) !important;
+}
+
+.intro {
+  margin-top: 18px !important;
+  font-size: 1rem !important;
+  line-height: 1.55 !important;
+}
+
+.consoleBody strong {
+  font-size: clamp(3.2rem, 8vw, 5.4rem) !important;
+  line-height: 0.95 !important;
+}
+
+.searchShell {
+  min-height: 56px !important;
+}
+
+.adSlot,
+.nativeAdSlot,
+.directAdLink {
+  background:
+    linear-gradient(135deg, rgba(0, 224, 255, 0.08), transparent 38%),
+    linear-gradient(315deg, rgba(255, 42, 141, 0.08), transparent 42%),
+    #070b12 !important;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.025) !important;
+}
+
+iframe.adSlot {
+  border: 0 !important;
+  background: #070b12 !important;
+  color-scheme: dark !important;
+}
+
+.nativeAdSlot > div {
+  display: grid !important;
+  place-items: center !important;
+  width: 100% !important;
+  min-height: inherit !important;
+  background: transparent !important;
+}
+
+.nativeAdSlot iframe,
+.nativeAdSlot img {
+  max-width: 100% !important;
+}
+
+.directAdLink {
+  font-size: 0.94rem !important;
+  font-weight: 950 !important;
+}
+
+.sectionHeader h2 {
+  font-size: clamp(1.6rem, 3.3vw, 3rem) !important;
+  line-height: 1.04 !important;
+}
+
+.postGrid,
+.executorGrid {
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)) !important;
+}
+
+.postCard {
+  min-height: 292px !important;
+}
+
+.postText {
+  gap: 14px !important;
+  padding: 16px !important;
+}
+
+.postText strong {
+  font-size: 0.96rem !important;
+  line-height: 1.32 !important;
+}
+
+.postText span {
+  font-size: 0.9rem !important;
+  font-weight: 950 !important;
+}
+
+.executorCard {
+  grid-template-rows: 184px 1fr !important;
+  min-height: 326px !important;
+}
+
+.executorPoster span {
+  font-size: 0.86rem !important;
+  font-weight: 950 !important;
+}
+
+.executorBody {
+  gap: 16px !important;
+  padding: 18px !important;
+}
+
+.executorBody h2 {
+  font-size: 1.34rem !important;
+  line-height: 1.12 !important;
+}
+
+.executorBody p {
+  font-size: 0.92rem !important;
+}
+
+.executorBody a,
+.lootButton {
+  min-height: 50px !important;
+  font-size: 0.95rem !important;
+  font-weight: 950 !important;
+}
+
+.unlockPanel h1 {
+  font-size: clamp(1.35rem, 2.8vw, 1.9rem) !important;
+  line-height: 1.12 !important;
+}
+
+@media (max-width: 560px) {
+  .logoLockup {
+    font-size: 0.94rem !important;
+  }
+
+  .navPills a {
+    font-size: 0.86rem !important;
+  }
+
+  .hero h1,
+  .executorsHero h1 {
+    font-size: clamp(2.15rem, 12vw, 3.25rem) !important;
+    line-height: 1 !important;
+  }
+
+  .intro {
+    font-size: 0.95rem !important;
+  }
+}
