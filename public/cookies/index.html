@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#05080d" />
+    <title>Cookie Policy | KrayoSkriptz</title>
+    <meta
+      name="description"
+      content="Cookie Policy for KrayoSkriptz, including advertising cookies, Supabase admin sessions, and external media."
+    />
+    <link rel="canonical" href="https://krayoskriptz.vercel.app/cookies/" />
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #05080d;
+        --panel: #0c111b;
+        --line: rgba(255, 255, 255, 0.12);
+        --text: #f7fbff;
+        --muted: #a8b2c3;
+        --accent: #30f3ff;
+        --hot: #ff2a8d;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background:
+          radial-gradient(circle at 10% 0%, rgba(255, 42, 141, 0.14), transparent 28%),
+          radial-gradient(circle at 90% 8%, rgba(48, 243, 255, 0.14), transparent 30%),
+          var(--bg);
+        color: var(--text);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font-size: 15px;
+        line-height: 1.65;
+      }
+
+      a {
+        color: var(--accent);
+        font-weight: 800;
+        text-decoration: none;
+      }
+
+      .wrap {
+        width: min(920px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 28px 0 56px;
+      }
+
+      header,
+      main {
+        border: 1px solid var(--line);
+        background: rgba(12, 17, 27, 0.84);
+        backdrop-filter: blur(16px);
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 18px;
+        padding: 12px 14px;
+        border-radius: 14px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--text);
+        font-size: 0.98rem;
+      }
+
+      .brand img {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+      }
+
+      nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 8px;
+      }
+
+      nav a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 36px;
+        padding: 0 12px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        color: #d7e2f2;
+        font-size: 0.84rem;
+      }
+
+      main {
+        padding: clamp(22px, 4vw, 44px);
+        border-radius: 18px;
+      }
+
+      h1 {
+        margin: 0 0 8px;
+        font-size: clamp(2rem, 5vw, 3.6rem);
+        line-height: 1;
+      }
+
+      h2 {
+        margin: 30px 0 10px;
+        color: #ffffff;
+        font-size: 1.12rem;
+      }
+
+      p,
+      li {
+        color: var(--muted);
+      }
+
+      .meta {
+        margin: 0 0 22px;
+        color: #d9e7f7;
+        font-weight: 800;
+      }
+
+      .table {
+        display: grid;
+        gap: 10px;
+        margin-top: 16px;
+      }
+
+      .row {
+        display: grid;
+        grid-template-columns: 180px 1fr;
+        gap: 12px;
+        padding: 14px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.035);
+      }
+
+      .row strong {
+        color: #ffffff;
+      }
+
+      @media (max-width: 640px) {
+        .row {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <a class="brand" href="/">
+          <img src="/logo.svg" alt="KrayoSkriptz logo" />
+          <strong>KrayoSkriptz</strong>
+        </a>
+        <nav aria-label="Policy navigation">
+          <a href="/">Home</a>
+          <a href="/privacy/">Privacy</a>
+          <a href="/ad-test/">Ad Test</a>
+        </nav>
+      </header>
+
+      <main>
+        <h1>Cookie Policy</h1>
+        <p class="meta">Last updated: June 7, 2026</p>
+
+        <p>
+          KrayoSkriptz uses cookies, browser storage, scripts, and similar technologies to load the website, keep admin
+          sessions working, show external media, and display ads. This page explains the main categories.
+        </p>
+
+        <div class="table" aria-label="Cookie categories">
+          <div class="row">
+            <strong>Essential</strong>
+            <span>Used by hosting and the browser to deliver pages, assets, security checks, and basic site functions.</span>
+          </div>
+          <div class="row">
+            <strong>Admin session</strong>
+            <span>Supabase Auth can store login/session data in the browser for the private admin page.</span>
+          </div>
+          <div class="row">
+            <strong>Advertising</strong>
+            <span>Third-party ad providers can use cookies, local storage, scripts, redirects, and measurement tags.</span>
+          </div>
+          <div class="row">
+            <strong>External media</strong>
+            <span>Services such as YouTube or Lootlabs may set their own cookies when previews, videos, or links are opened.</span>
+          </div>
+        </div>
+
+        <h2>Advertising Cookies</h2>
+        <p>
+          Advertising scripts may be loaded from third-party networks. These providers can use identifiers to measure ad
+          delivery, limit repeated ads, detect invalid traffic, and personalize campaigns. Their own privacy and cookie
+          policies apply when their scripts run.
+        </p>
+
+        <h2>Managing Cookies</h2>
+        <p>
+          You can delete cookies, block third-party cookies, or restrict scripts in your browser settings. Blocking advertising
+          scripts can make some advertising frames fail to load or trigger anti-adblock messages.
+        </p>
+
+        <h2>Changes</h2>
+        <p>
+          This page can be updated when new ad networks, analytics tools, login features, or external embeds are added to
+          the site.
+        </p>
+      </main>
+    </div>
+  </body>
+</html>
