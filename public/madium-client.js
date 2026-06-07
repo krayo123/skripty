@@ -1,32 +1,50 @@
 (() => {
-  const madiumDownloadUrl = 'https://filerift.com/file/w3Zpjdoc10';
-  const madiumPreviewUrl = 'https://img.youtube.com/vi/Ds3tkKpDuiU/maxresdefault.jpg';
-  const madiumPreviewFallbackUrl = 'https://img.youtube.com/vi/Ds3tkKpDuiU/hqdefault.jpg';
+  const executorPatches = {
+    madium: {
+      title: 'madium',
+      badge: 'Free',
+      tone: 'Free executor client download',
+      downloadUrl: 'https://filerift.com/file/w3Zpjdoc10',
+      previewUrl: 'https://img.youtube.com/vi/Ds3tkKpDuiU/maxresdefault.jpg',
+      fallbackUrl: 'https://img.youtube.com/vi/Ds3tkKpDuiU/hqdefault.jpg',
+      ariaLabel: 'Download Madium executor',
+    },
+    xeno: {
+      title: 'xeno',
+      badge: 'Xeno',
+      tone: 'Xeno executor download',
+      downloadUrl: 'https://wearedevs.net/d/Xeno',
+      previewUrl: 'https://img.youtube.com/vi/J-aI6tVNXXA/maxresdefault.jpg',
+      fallbackUrl: 'https://img.youtube.com/vi/J-aI6tVNXXA/hqdefault.jpg',
+      ariaLabel: 'Download Xeno executor',
+    },
+  };
+
   let observer;
   let observerTimer;
 
-  function injectMadiumStyles() {
-    if (document.getElementById('madium-client-styles')) return;
+  function injectExecutorStyles() {
+    if (document.getElementById('executor-card-patch-styles')) return;
 
     const style = document.createElement('style');
-    style.id = 'madium-client-styles';
+    style.id = 'executor-card-patch-styles';
     style.textContent = `
-      .executorCard.hasMadiumPreview {
+      .executorCard.hasExecutorPreview {
         cursor: pointer;
       }
 
-      .executorCard.hasMadiumPreview .executorPoster {
+      .executorCard.hasExecutorPreview .executorPoster {
         background: #050814;
       }
 
-      .executorCard.hasMadiumPreview .executorPoster::before {
+      .executorCard.hasExecutorPreview .executorPoster::before {
         z-index: 1;
         inset: 0;
         background: linear-gradient(180deg, transparent 45%, rgba(4, 7, 13, 0.88));
         transform: none;
       }
 
-      .executorCard.hasMadiumPreview .executorPoster img {
+      .executorCard.hasExecutorPreview .executorPoster img {
         position: absolute;
         inset: 0;
         z-index: 0;
@@ -36,84 +54,97 @@
         object-fit: cover;
       }
 
-      .executorCard.hasMadiumPreview .executorPoster svg {
+      .executorCard.hasExecutorPreview .executorPoster svg {
         display: none;
       }
 
-      .executorCard.hasMadiumPreview .executorPoster span {
+      .executorCard.hasExecutorPreview .executorPoster span {
         z-index: 2;
       }
     `;
     document.head.appendChild(style);
   }
 
-  function getMadiumCard(target) {
+  function getCardTitle(card) {
+    return card?.querySelector('.executorBody h2')?.textContent?.trim().toLowerCase() || '';
+  }
+
+  function getPatchForCard(card) {
+    const title = getCardTitle(card);
+    return Object.values(executorPatches).find((patch) => patch.title === title);
+  }
+
+  function getPatchedCard(target) {
     const card = target?.closest?.('.executorCard');
-    const title = card?.querySelector('.executorBody h2')?.textContent?.trim().toLowerCase();
-    return title === 'madium' ? card : null;
+    const patch = getPatchForCard(card);
+    return patch ? { card, patch } : null;
   }
 
-  function openMadium() {
-    window.open(madiumDownloadUrl, '_blank', 'noopener,noreferrer');
+  function openExecutor(patch) {
+    window.open(patch.downloadUrl, '_blank', 'noopener,noreferrer');
   }
 
-  function bindMadiumCardClick(card) {
-    if (card.dataset.madiumClickBound === 'true') return;
+  function bindCardClick(card, patch) {
+    if (card.dataset.executorClickBound === patch.title) return;
 
-    card.dataset.madiumClickBound = 'true';
+    card.dataset.executorClickBound = patch.title;
     card.tabIndex = 0;
     card.setAttribute('role', 'link');
-    card.setAttribute('aria-label', 'Download Madium executor');
+    card.setAttribute('aria-label', patch.ariaLabel);
 
     card.addEventListener('keydown', (event) => {
       if (event.key !== 'Enter' && event.key !== ' ') return;
       event.preventDefault();
-      openMadium();
+      openExecutor(patch);
     });
   }
 
-  function patchMadiumCard() {
-    injectMadiumStyles();
-    let patched = false;
+  function patchExecutorCard(card, patch) {
+    card.classList.add('hasExecutorPreview', `has-${patch.title}-preview`);
+    bindCardClick(card, patch);
 
-    document.querySelectorAll('.executorCard').forEach((card) => {
-      const title = card.querySelector('.executorBody h2')?.textContent?.trim().toLowerCase();
-      if (title !== 'madium') return;
-
-      patched = true;
-      card.classList.add('hasMadiumPreview');
-      bindMadiumCardClick(card);
-
-      const poster = card.querySelector('.executorPoster');
-      if (poster && !poster.querySelector('[data-madium-preview]')) {
-        const image = document.createElement('img');
-        image.src = madiumPreviewUrl;
+    const poster = card.querySelector('.executorPoster');
+    if (poster) {
+      let image = poster.querySelector(`[data-executor-preview="${patch.title}"]`);
+      if (!image) {
+        image = document.createElement('img');
         image.alt = '';
         image.loading = 'eager';
-        image.dataset.madiumPreview = 'true';
+        image.dataset.executorPreview = patch.title;
         image.addEventListener('error', () => {
-          if (image.src !== madiumPreviewFallbackUrl) image.src = madiumPreviewFallbackUrl;
+          if (!image.src.includes('/hqdefault.jpg')) image.src = patch.fallbackUrl;
         });
         poster.prepend(image);
       }
+      if (image.src !== patch.previewUrl) image.src = patch.previewUrl;
+    }
 
-      const badge = poster?.querySelector('span');
-      if (badge && badge.textContent.trim() !== 'Free') badge.textContent = 'Free';
+    const badge = poster?.querySelector('span');
+    if (badge && badge.textContent.trim() !== patch.badge) badge.textContent = patch.badge;
 
-      const tone = card.querySelector('.executorBody p');
-      if (tone && tone.textContent !== 'Free executor client download') {
-        tone.textContent = 'Free executor client download';
-      }
+    const tone = card.querySelector('.executorBody p');
+    if (tone && tone.textContent !== patch.tone) tone.textContent = patch.tone;
 
-      const link = card.querySelector('.executorBody a');
-      if (link) {
-        link.href = madiumDownloadUrl;
-        link.target = '_blank';
-        link.rel = 'noopener noreferrer';
-      }
+    const link = card.querySelector('.executorBody a');
+    if (link) {
+      link.href = patch.downloadUrl;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+    }
+  }
+
+  function patchExecutorCards() {
+    injectExecutorStyles();
+    const patchedTitles = new Set();
+
+    document.querySelectorAll('.executorCard').forEach((card) => {
+      const patch = getPatchForCard(card);
+      if (!patch) return;
+      patchExecutorCard(card, patch);
+      patchedTitles.add(patch.title);
     });
 
-    return patched;
+    return patchedTitles.size === Object.keys(executorPatches).length;
   }
 
   function stopWatching() {
@@ -123,13 +154,13 @@
     observerTimer = undefined;
   }
 
-  function watchForMadiumCard() {
+  function watchForExecutorCards() {
     stopWatching();
     if (!window.location.pathname.includes('executors')) return;
-    if (patchMadiumCard()) return;
+    if (patchExecutorCards()) return;
 
     observer = new MutationObserver(() => {
-      if (patchMadiumCard()) stopWatching();
+      if (patchExecutorCards()) stopWatching();
     });
     observer.observe(document.body, { childList: true, subtree: true });
     observerTimer = window.setTimeout(stopWatching, 15000);
@@ -139,20 +170,20 @@
     document.addEventListener(
       'click',
       (event) => {
-        const card = getMadiumCard(event.target);
-        if (!card) return;
+        const result = getPatchedCard(event.target);
+        if (!result) return;
 
         event.preventDefault();
         event.stopPropagation();
-        patchMadiumCard();
-        openMadium();
+        patchExecutorCard(result.card, result.patch);
+        openExecutor(result.patch);
       },
       true,
     );
 
-    watchForMadiumCard();
-    window.setTimeout(watchForMadiumCard, 600);
-    window.addEventListener('popstate', () => window.setTimeout(watchForMadiumCard, 80));
+    watchForExecutorCards();
+    window.setTimeout(watchForExecutorCards, 600);
+    window.addEventListener('popstate', () => window.setTimeout(watchForExecutorCards, 80));
   }
 
   if (document.readyState === 'loading') {
