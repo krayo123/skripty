@@ -1,5 +1,15 @@
 (() => {
+  const hiddenExecutors = new Set(['solara']);
   const executorPatches = {
+    velocity: {
+      title: 'velocity',
+      badge: 'Velocity',
+      tone: 'Velocity executor download',
+      downloadUrl: 'https://velocity-executor.com/download/',
+      previewUrl: 'https://img.youtube.com/vi/ubSyv_0p9e8/maxresdefault.jpg',
+      fallbackUrl: 'https://img.youtube.com/vi/ubSyv_0p9e8/hqdefault.jpg',
+      ariaLabel: 'Download Velocity executor',
+    },
     madium: {
       title: 'madium',
       badge: 'Free',
@@ -138,6 +148,12 @@
     const patchedTitles = new Set();
 
     document.querySelectorAll('.executorCard').forEach((card) => {
+      const title = getCardTitle(card);
+      if (hiddenExecutors.has(title)) {
+        card.remove();
+        return;
+      }
+
       const patch = getPatchForCard(card);
       if (!patch) return;
       patchExecutorCard(card, patch);
