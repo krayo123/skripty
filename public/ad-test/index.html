@@ -204,6 +204,34 @@
         font-weight: 950;
       }
 
+      .scriptOnlyCard {
+        align-content: space-between;
+        min-height: 170px;
+      }
+
+      .scriptStatus {
+        display: grid;
+        gap: 8px;
+        min-height: 92px;
+        padding: 14px;
+        border: 1px solid rgba(48, 243, 255, 0.18);
+        border-radius: 12px;
+        background:
+          linear-gradient(135deg, rgba(48, 243, 255, 0.08), transparent 44%),
+          linear-gradient(315deg, rgba(255, 42, 141, 0.08), transparent 44%),
+          #070b12;
+      }
+
+      .scriptStatus strong {
+        color: var(--ok);
+        line-height: 1.2;
+      }
+
+      .scriptStatus span {
+        color: var(--muted);
+        line-height: 1.45;
+      }
+
       .ok {
         color: var(--ok);
       }
@@ -260,27 +288,28 @@
         { id: 'tall-skyscraper', title: 'Tall skyscraper', width: 160, height: 600, key: '75952d1ada641b0b480dfaf794dbe2cd' }
       ];
 
-      const scriptSlots = [
+      const nativeScriptSlots = [
         {
           id: 'native',
           title: 'Native block',
           width: 330,
           height: 280,
           html: '<script async="async" data-cfasync="false" src="https://pl29649395.effectivecpmnetwork.com/62357ec70029d873daedb66eb2cfbba5/invoke.js"><\/script><div id="container-62357ec70029d873daedb66eb2cfbba5"></div>'
-        },
+        }
+      ];
+
+      const scriptOnlySlots = [
         {
           id: 'script-a',
           title: 'Script tag A',
-          width: 330,
-          height: 170,
-          html: '<script src="https://pl29649394.effectivecpmnetwork.com/f9/1d/0e/f91d0efc66ef091f9b1eeb1b998ad40f.js"><\/script>'
+          type: 'Popunder script',
+          src: 'https://pl29649394.effectivecpmnetwork.com/f9/1d/0e/f91d0efc66ef091f9b1eeb1b998ad40f.js'
         },
         {
           id: 'script-b',
           title: 'Script tag B',
-          width: 330,
-          height: 170,
-          html: '<script src="https://pl29649398.effectivecpmnetwork.com/14/2b/fc/142bfc32c774f5f87f5ea53d57e6c397.js"><\/script>'
+          type: 'Popunder script',
+          src: 'https://pl29649398.effectivecpmnetwork.com/14/2b/fc/142bfc32c774f5f87f5ea53d57e6c397.js'
         }
       ];
 
@@ -306,6 +335,22 @@
           frame.dataset.loaded = 'yes';
         });
         return { card, frame };
+      }
+
+      function makeScriptOnlyCard(slot) {
+        const card = document.createElement('section');
+        card.className = 'card scriptOnlyCard';
+        card.innerHTML = `
+          <div class="cardHeader">
+            <h2>${slot.title}</h2>
+            <span>${slot.type}</span>
+          </div>
+          <div class="scriptStatus" data-script-status="${slot.id}">
+            <strong>Script-only ad loaded on the main site</strong>
+            <span>This code is a popunder/background script. It does not render a visible 330x170 banner, so an empty frame here was expected.</span>
+          </div>
+        `;
+        return card;
       }
 
       function adFrameSource(slot) {
@@ -369,10 +414,14 @@
         frame.srcdoc = adFrameSource(slot);
       }
 
-      for (const slot of scriptSlots) {
+      for (const slot of nativeScriptSlots) {
         const { card, frame } = makeCard(slot);
         grid.appendChild(card);
         frame.srcdoc = scriptFrameSource(slot);
+      }
+
+      for (const slot of scriptOnlySlots) {
+        grid.appendChild(makeScriptOnlyCard(slot));
       }
 
       window.setTimeout(() => {
@@ -384,7 +433,7 @@
           return;
         }
 
-        status.innerHTML = `<span class="ok">${loaded}/${frames.length} frames loaded.</span> If a loaded frame is still empty, the ad network may have no fill for this visit or region.`;
+        status.innerHTML = `<span class="ok">${loaded}/${frames.length} display frames loaded.</span> ${scriptOnlySlots.length} popunder scripts are script-only and do not show a visible frame.`;
       }, 5000);
     </script>
   </body>
