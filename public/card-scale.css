@@ -1,0 +1,47 @@
+.postGrid {
+  grid-template-columns: repeat(auto-fill, minmax(300px, 360px)) !important;
+  gap: 18px !important;
+}
+
+.postCard {
+  min-height: 306px !important;
+}
+
+.postText {
+  gap: 14px !important;
+  padding: 16px !important;
+}
+
+.postText strong {
+  font-size: 0.98rem !important;
+  line-height: 1.32 !important;
+}
+
+.postText span {
+  font-size: 0.88rem !important;
+}
+
+.playBadge {
+  right: 12px !important;
+  bottom: 12px !important;
+  width: 42px !important;
+  height: 42px !important;
+}
+
+.hotBadge {
+  left: 12px !important;
+  top: 12px !important;
+  min-height: 28px !important;
+  padding: 0 11px !important;
+  font-size: 0.76rem !important;
+}
+
+@media (max-width: 760px) {
+  .postGrid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .postCard {
+    min-height: 300px !important;
+  }
+}
