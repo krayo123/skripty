@@ -6,19 +6,24 @@ import {
   BadgeCheck,
   Bolt,
   Download,
+  Eye,
   ExternalLink,
   Flame,
+  Lock,
   Loader2,
+  LogIn,
+  LogOut,
   Play,
+  Plus,
   Search,
-  ShieldCheck,
   Sparkles,
+  User,
 } from 'lucide-react';
 import './styles.css';
 
 const defaultSupabaseUrl = 'https://vwiwgbvtkjyerqpjbkfc.supabase.co/rest/v1/';
 const defaultSupabaseAnonKey =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3aXdnYnZ0a2p5ZXJxcGpia2ZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1OTg5NjIsImV4cCI6MjA5NjE3NDk2Mn0.uqMgkZTVOm0NmU54HSlQe33BeAfYxFPj5xzA_IfsXB8';
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJIUzI1NiIsInJlZiI6InZ3aXdnYnZ0a2p5ZXJxcGpia2ZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1OTg5NjIsImV4cCI6MjA5NjE3NDk2Mn0.uqMgkZTVOm0NmU54HSlQe33BeAfYxFPj5xzA_IfsXB8';
 const supabaseUrl = normalizeSupabaseUrl(getEnvValue(import.meta.env.VITE_SUPABASE_URL, defaultSupabaseUrl));
 const supabaseAnonKey = getEnvValue(import.meta.env.VITE_SUPABASE_ANON_KEY, defaultSupabaseAnonKey);
 const logoUrl = getEnvValue(import.meta.env.VITE_LOGO_URL, '/logo.svg');
@@ -58,35 +63,33 @@ const iframeAds = {
 const executors = [
   {
     name: 'Velocity',
-    tone: 'Fast inject, clean UI',
-    href: 'https://getvelocity.live/',
-    badge: 'Popular',
+    tone: 'Velocity executor download',
+    href: 'https://velocity-executor.com/download/',
+    badge: 'Velocity',
     icon: Bolt,
     palette: 'velocity',
-  },
-  {
-    name: 'Solara',
-    tone: 'Stable build for daily use',
-    href: 'https://getsolara.dev/',
-    badge: 'Stable',
-    icon: ShieldCheck,
-    palette: 'solara',
-  },
-  {
-    name: 'Xeno',
-    tone: 'Lightweight executor setup',
-    href: 'https://xeno.onl/',
-    badge: 'Light',
-    icon: Sparkles,
-    palette: 'xeno',
+    preview: 'https://img.youtube.com/vi/ubSyv_0p9e8/maxresdefault.jpg',
+    fallbackPreview: 'https://img.youtube.com/vi/ubSyv_0p9e8/hqdefault.jpg',
   },
   {
     name: 'Madium',
-    tone: 'Simple launch and download',
-    href: 'https://madium.xyz/',
-    badge: 'New',
+    tone: 'Free executor client download',
+    href: 'https://filerift.com/file/w3Zpjdoc10',
+    badge: 'Free',
     icon: Flame,
     palette: 'madium',
+    preview: 'https://img.youtube.com/vi/Ds3tkKpDuiU/maxresdefault.jpg',
+    fallbackPreview: 'https://img.youtube.com/vi/Ds3tkKpDuiU/hqdefault.jpg',
+  },
+  {
+    name: 'Xeno',
+    tone: 'Xeno executor download',
+    href: 'https://wearedevs.net/d/Xeno',
+    badge: 'Xeno',
+    icon: Sparkles,
+    palette: 'xeno',
+    preview: 'https://img.youtube.com/vi/J-aI6tVNXXA/maxresdefault.jpg',
+    fallbackPreview: 'https://img.youtube.com/vi/J-aI6tVNXXA/hqdefault.jpg',
   },
 ];
 
@@ -116,21 +119,29 @@ function loadScriptOnce({ id, src, async = true, cfasync, onLoad, onError }) {
   document.body.appendChild(script);
 }
 
-function useGlobalAdScripts() {
+function useGlobalAdScripts(enabled = true) {
   useEffect(() => {
+    if (!enabled) return;
+
     globalAdScripts.forEach((adScript) => {
       loadScriptOnce({
         ...adScript,
         onError: () => window.dispatchEvent(new Event('krayo-ad-block-detected')),
       });
     });
-  }, []);
+  }, [enabled]);
 }
 
-function useAdBlockDetection() {
-  const [status, setStatus] = useState('checking');
+function useAdBlockDetection(enabled = true) {
+  const [status, setStatus] = useState(enabled ? 'checking' : 'clear');
 
   useEffect(() => {
+    if (!enabled) {
+      setStatus('clear');
+      return undefined;
+    }
+
+    setStatus('checking');
     let alive = true;
     const markBlocked = () => {
       if (alive) setStatus('blocked');
@@ -171,10 +182,10 @@ function useAdBlockDetection() {
       window.removeEventListener('krayo-ad-block-detected', markBlocked);
       cleanupAdBaits(baitNodes);
     };
-  }, []);
+  }, [enabled]);
 
   useEffect(() => {
-    if (status === 'clear') return undefined;
+    if (!enabled || status === 'clear') return undefined;
 
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
@@ -182,7 +193,7 @@ function useAdBlockDetection() {
     return () => {
       document.body.style.overflow = previousOverflow;
     };
-  }, [status]);
+  }, [enabled, status]);
 
   return status;
 }
@@ -270,6 +281,15 @@ function getThumbnail(url) {
   return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : '';
 }
 
+function isHttpUrl(value) {
+  try {
+    const parsed = new URL(value);
+    return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+  } catch {
+    return false;
+  }
+}
+
 async function getVideoMetadata(url) {
   const id = getYouTubeId(url);
   const fallback = {
@@ -326,6 +346,9 @@ function SiteHeader() {
         </a>
         <a className={path.startsWith('/executors') ? 'active' : ''} href="/executors">
           Executors
+        </a>
+        <a className={path.startsWith('/admin') ? 'active' : ''} href="/admin">
+          Admin
         </a>
       </nav>
     </header>
@@ -688,6 +711,16 @@ function ExecutorsPage() {
             return (
               <article className={`executorCard ${executor.palette}`} key={executor.name}>
                 <div className="executorPoster">
+                  <img
+                    src={executor.preview}
+                    alt=""
+                    loading="eager"
+                    onError={(event) => {
+                      if (event.currentTarget.src !== executor.fallbackPreview) {
+                        event.currentTarget.src = executor.fallbackPreview;
+                      }
+                    }}
+                  />
                   <Icon size={76} strokeWidth={1.7} />
                   <span>{executor.badge}</span>
                 </div>
@@ -706,6 +739,263 @@ function ExecutorsPage() {
           })}
         </div>
       </section>
+    </main>
+  );
+}
+
+function useAdminSession() {
+  const [session, setSession] = useState(null);
+  const [checking, setChecking] = useState(true);
+
+  useEffect(() => {
+    let alive = true;
+
+    supabase.auth.getSession().then(({ data }) => {
+      if (!alive) return;
+      setSession(data.session);
+      setChecking(false);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+      setSession(nextSession);
+      setChecking(false);
+    });
+
+    return () => {
+      alive = false;
+      subscription.unsubscribe();
+    };
+  }, []);
+
+  return { session, checking };
+}
+
+function AdminPage() {
+  const { session, checking } = useAdminSession();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [youtubeLink, setYoutubeLink] = useState('');
+  const [lootlabsLink, setLootlabsLink] = useState('');
+  const [preview, setPreview] = useState(null);
+  const [previewStatus, setPreviewStatus] = useState('idle');
+  const [authError, setAuthError] = useState('');
+  const [formError, setFormError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    const nextLink = youtubeLink.trim();
+    if (!nextLink || !getYouTubeId(nextLink)) {
+      setPreview(null);
+      setPreviewStatus('idle');
+      return undefined;
+    }
+
+    let alive = true;
+    setPreviewStatus('loading');
+
+    const timerId = window.setTimeout(async () => {
+      const metadata = await getVideoMetadata(nextLink);
+      if (!alive) return;
+      setPreview(metadata);
+      setPreviewStatus('ready');
+    }, 350);
+
+    return () => {
+      alive = false;
+      window.clearTimeout(timerId);
+    };
+  }, [youtubeLink]);
+
+  async function handleLogin(event) {
+    event.preventDefault();
+    setAuthError('');
+    setBusy(true);
+
+    const { error } = await supabase.auth.signInWithPassword({
+      email: email.trim(),
+      password,
+    });
+
+    if (error) {
+      setAuthError(error.message);
+    } else {
+      setPassword('');
+    }
+
+    setBusy(false);
+  }
+
+  async function handleLogout() {
+    setAuthError('');
+    setBusy(true);
+    await supabase.auth.signOut();
+    setBusy(false);
+  }
+
+  async function handleAddPost(event) {
+    event.preventDefault();
+    const nextYoutubeLink = youtubeLink.trim();
+    const nextLootlabsLink = lootlabsLink.trim();
+
+    setFormError('');
+    setSuccess('');
+
+    if (!getYouTubeId(nextYoutubeLink)) {
+      setFormError('Paste a valid YouTube video, shorts, embed, or youtu.be link.');
+      return;
+    }
+
+    if (!isHttpUrl(nextLootlabsLink)) {
+      setFormError('Paste a valid Lootlabs or unlock link that starts with http or https.');
+      return;
+    }
+
+    setBusy(true);
+    const { error } = await supabase.from('posts').insert({
+      YoutubeLink: nextYoutubeLink,
+      LootlabsLink: nextLootlabsLink,
+    });
+
+    if (error) {
+      setFormError(error.message);
+    } else {
+      setSuccess('Post added. It will appear on the home page after refresh.');
+      setYoutubeLink('');
+      setLootlabsLink('');
+      setPreview(null);
+      setPreviewStatus('idle');
+    }
+
+    setBusy(false);
+  }
+
+  return (
+    <main className="pageShell adminShell">
+      <SiteHeader />
+
+      <section className="adminHero">
+        <div>
+          <p className="eyebrow">private publishing</p>
+          <h1>Admin panel</h1>
+          <p className="intro">Add a YouTube preview and Lootlabs unlock link without opening the SQL editor.</p>
+        </div>
+        {session ? (
+          <button className="adminGhostButton" type="button" onClick={handleLogout} disabled={busy}>
+            <LogOut size={18} />
+            Sign out
+          </button>
+        ) : null}
+      </section>
+
+      {checking ? (
+        <div className="statusPanel loading">
+          <Loader2 size={20} />
+          Checking admin session
+        </div>
+      ) : null}
+
+      {!checking && !session ? (
+        <form className="adminPanel" onSubmit={handleLogin}>
+          <div>
+            <p className="eyebrow">supabase auth</p>
+            <h2>Sign in</h2>
+          </div>
+          <label>
+            <span>Email</span>
+            <input
+              type="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              autoComplete="email"
+              required
+            />
+          </label>
+          <label>
+            <span>Password</span>
+            <input
+              type="password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              autoComplete="current-password"
+              required
+            />
+          </label>
+          {authError ? <div className="adminError">{authError}</div> : null}
+          <button className="adminButton" type="submit" disabled={busy}>
+            {busy ? <Loader2 size={18} /> : <LogIn size={18} />}
+            Sign in
+          </button>
+          <p className="adminNote">
+            Use a Supabase Auth user from your project. Keep public sign-ups disabled unless you add stricter admin
+            policies.
+          </p>
+        </form>
+      ) : null}
+
+      {!checking && session ? (
+        <section className="adminGrid">
+          <form className="adminPanel" onSubmit={handleAddPost}>
+            <div>
+              <p className="eyebrow">new script post</p>
+              <h2>Add post</h2>
+            </div>
+            <label>
+              <span>YouTube link</span>
+              <input
+                type="url"
+                value={youtubeLink}
+                onChange={(event) => setYoutubeLink(event.target.value)}
+                placeholder="https://www.youtube.com/watch?v=..."
+                required
+              />
+            </label>
+            <label>
+              <span>Lootlabs link</span>
+              <input
+                type="url"
+                value={lootlabsLink}
+                onChange={(event) => setLootlabsLink(event.target.value)}
+                placeholder="https://lootlabs.gg/..."
+                required
+              />
+            </label>
+            {formError ? <div className="adminError">{formError}</div> : null}
+            {success ? <div className="adminSuccess">{success}</div> : null}
+            <button className="adminButton" type="submit" disabled={busy}>
+              {busy ? <Loader2 size={18} /> : <Plus size={18} />}
+              Add post
+            </button>
+          </form>
+
+          <aside className="adminPreview">
+            <div className="adminPreviewHeader">
+              <Eye size={18} />
+              Preview
+            </div>
+            {preview ? (
+              <>
+                <div className="adminPreviewThumb">
+                  <img src={preview.thumbnail} alt="" />
+                </div>
+                <strong>{preview.title}</strong>
+                <span>{previewStatus === 'loading' ? 'Refreshing YouTube metadata' : 'Ready to publish'}</span>
+              </>
+            ) : (
+              <div className="adminEmptyPreview">
+                <Lock size={22} />
+                Paste a YouTube link to preview the card before publishing.
+              </div>
+            )}
+            <div className="adminAccount">
+              <User size={16} />
+              {session.user.email}
+            </div>
+          </aside>
+        </section>
+      ) : null}
     </main>
   );
 }
@@ -790,15 +1080,20 @@ function PostPage({ posts, loading, error }) {
 }
 
 function App() {
-  useGlobalAdScripts();
-  const adBlockStatus = useAdBlockDetection();
+  const currentPath = window.location.pathname;
+  const isAdminPage = currentPath.startsWith('/admin');
+
+  useGlobalAdScripts(!isAdminPage);
+  const adBlockStatus = useAdBlockDetection(!isAdminPage);
 
   const { posts, loading, error } = usePosts();
-  const isPostPage = window.location.pathname.startsWith('/post/');
-  const isExecutorsPage = window.location.pathname.startsWith('/executors');
+  const isPostPage = currentPath.startsWith('/post/');
+  const isExecutorsPage = currentPath.startsWith('/executors');
   let page;
 
-  if (isPostPage) {
+  if (isAdminPage) {
+    page = <AdminPage />;
+  } else if (isPostPage) {
     page = <PostPage posts={posts} loading={loading} error={error} />;
   } else if (isExecutorsPage) {
     page = <ExecutorsPage />;
