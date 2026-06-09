@@ -263,7 +263,7 @@
 
       <section class="hero">
         <h1>Ad test</h1>
-        <p>Live checks for the ad codes used by the project. Empty or blocked frames usually mean AdBlock, browser privacy filtering, no ad fill, or a network-side limit.</p>
+        <p>Live checks for the ad codes used by the project. Display and native ads render in frames; popunder scripts are script-only and do not show a visible banner.</p>
         <div class="status" id="status">Starting ad checks...</div>
       </section>
 
@@ -433,7 +433,8 @@
           return;
         }
 
-        status.innerHTML = `<span class="ok">${loaded}/${frames.length} display frames loaded.</span> ${scriptOnlySlots.length} popunder scripts are script-only and do not show a visible frame.`;
+        const totalCards = 1 + frames.length + scriptOnlySlots.length;
+        status.innerHTML = `<span class="ok">${loaded}/${frames.length} display frames loaded.</span> ${totalCards} test cards total: 1 direct link, ${frames.length} display/native frames, and ${scriptOnlySlots.length} popunder scripts.`;
       }, 5000);
     </script>
   </body>
