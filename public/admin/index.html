@@ -175,6 +175,34 @@
         gap: 16px;
       }
 
+      body:not(.is-signed-in) .wrap {
+        display: grid;
+        place-items: center;
+        min-height: 100vh;
+        padding: 24px 0;
+      }
+
+      body:not(.is-signed-in) header,
+      body:not(.is-signed-in) .hero,
+      body:not(.is-signed-in) .setupPanel,
+      body:not(.is-signed-in) .adminWork,
+      body:not(.is-signed-in) #logoutButton {
+        display: none;
+      }
+
+      body:not(.is-signed-in) #authMessage:empty {
+        display: none;
+      }
+
+      body:not(.is-signed-in) .grid {
+        display: block;
+        width: min(100%, 420px);
+      }
+
+      body:not(.is-signed-in) .loginColumn {
+        display: block;
+      }
+
       .panel {
         padding: 18px;
       }
@@ -352,9 +380,9 @@
       </section>
 
       <main class="grid">
-        <div class="stack">
-          <section class="panel stack">
-            <h2>Sign in</h2>
+        <div class="stack loginColumn">
+          <section class="panel stack loginPanel">
+            <h2>Zaloguj</h2>
             <form id="loginForm" class="stack">
               <label>
                 Email
@@ -364,13 +392,13 @@
                 Password
                 <input id="password" type="password" autocomplete="current-password" required />
               </label>
-              <button class="primaryButton" type="submit">Sign in</button>
+              <button class="primaryButton" type="submit">Zaloguj</button>
               <button class="ghostButton" id="logoutButton" type="button">Sign out</button>
             </form>
-            <div class="message" id="authMessage">Create a Supabase Auth user, then add that email in supabase-setup.sql.</div>
+            <div class="message" id="authMessage"></div>
           </section>
 
-          <section class="panel">
+          <section class="panel setupPanel">
             <h2>Setup checklist</h2>
             <ol>
               <li>Open Supabase SQL Editor and run <code>supabase-setup.sql</code> from this repo.</li>
@@ -381,7 +409,7 @@
           </section>
         </div>
 
-        <div class="stack">
+        <div class="stack adminWork">
           <section class="panel stack">
             <h2>Add post</h2>
             <form id="postForm" class="stack">
@@ -467,11 +495,19 @@
 
       function setFormState(session) {
         const signedIn = Boolean(session?.user?.email);
+        document.body.classList.toggle('is-signed-in', signedIn);
         sessionStatus.textContent = signedIn ? session.user.email : 'Not signed in';
         logoutButton.disabled = !signedIn;
         postForm.querySelectorAll('input, button').forEach((element) => {
           element.disabled = !signedIn;
         });
+
+        if (!signedIn) {
+          postsEl.innerHTML = '';
+          postCount.textContent = '-';
+          dbStatus.textContent = 'Checking...';
+          postForm.reset();
+        }
       }
 
       async function checkDatabase() {
@@ -639,8 +675,10 @@
 
       const { data: sessionData } = await supabase.auth.getSession();
       setFormState(sessionData.session);
-      await checkDatabase();
-      await loadPosts();
+      if (sessionData.session) {
+        await checkDatabase();
+        await loadPosts();
+      }
     </script>
   </body>
 </html>
