@@ -134,6 +134,13 @@ function useGlobalAdScripts(enabled = true) {
 
 function useAdBlockDetection(enabled = true) {
   const [status, setStatus] = useState(enabled ? 'checking' : 'clear');
+  const [checkKey, setCheckKey] = useState(0);
+
+  const retry = () => {
+    if (!enabled) return;
+    setStatus('checking');
+    setCheckKey((currentKey) => currentKey + 1);
+  };
 
   useEffect(() => {
     if (!enabled) {
@@ -143,24 +150,20 @@ function useAdBlockDetection(enabled = true) {
 
     setStatus('checking');
     let alive = true;
-    const markBlocked = () => {
-      if (alive) setStatus('blocked');
+    let adScriptBlocked = false;
+    const markAdScriptBlocked = () => {
+      adScriptBlocked = true;
     };
     const markClear = () => {
       if (alive) setStatus((currentStatus) => (currentStatus === 'blocked' ? currentStatus : 'clear'));
     };
 
-    window.addEventListener('krayo-ad-block-detected', markBlocked);
+    window.addEventListener('krayo-ad-block-detected', markAdScriptBlocked);
 
     const baitNodes = createAdBlockBaits();
 
     const timerId = window.setTimeout(async () => {
-      const baitWasBlocked = baitNodes.some(isAdBaitBlocked);
-      if (baitWasBlocked) {
-        cleanupAdBaits(baitNodes);
-        markBlocked();
-        return;
-      }
+      const blockedBaits = baitNodes.filter(isAdBaitBlocked).length;
 
       const probeResults = await Promise.all(adBlockProbeUrls.map((url) => probeAdNetwork(url)));
       cleanupAdBaits(baitNodes);
@@ -168,21 +171,25 @@ function useAdBlockDetection(enabled = true) {
       if (!alive) return;
 
       const failedProbes = probeResults.filter((result) => !result).length;
-      if (failedProbes >= 2) {
-        markBlocked();
+      const strongBaitSignal = blockedBaits >= 2;
+      const strongNetworkSignal = failedProbes >= 3;
+      const mixedAdBlockSignal = (adScriptBlocked || blockedBaits > 0) && failedProbes >= 2;
+
+      if (strongBaitSignal || strongNetworkSignal || mixedAdBlockSignal) {
+        setStatus('blocked');
         return;
       }
 
       markClear();
-    }, 800);
+    }, 1000);
 
     return () => {
       alive = false;
       window.clearTimeout(timerId);
-      window.removeEventListener('krayo-ad-block-detected', markBlocked);
+      window.removeEventListener('krayo-ad-block-detected', markAdScriptBlocked);
       cleanupAdBaits(baitNodes);
     };
-  }, [enabled]);
+  }, [enabled, checkKey]);
 
   useEffect(() => {
     if (!enabled || status === 'clear') return undefined;
@@ -195,7 +202,7 @@ function useAdBlockDetection(enabled = true) {
     };
   }, [enabled, status]);
 
-  return status;
+  return { status, retry };
 }
 
 function createAdBlockBaits() {
@@ -498,7 +505,7 @@ const adBlockGateStyles = {
   },
 };
 
-function AdBlockGate({ status }) {
+function AdBlockGate({ status, onRetry }) {
   if (status === 'clear') return null;
 
   const isChecking = status === 'checking';
@@ -514,11 +521,11 @@ function AdBlockGate({ status }) {
         <p style={adBlockGateStyles.copy}>
           {isChecking
             ? 'One quick ad check before the site opens.'
-            : 'KrayoSkriptz uses ads to keep scripts free. Turn off your ad blocker for this site, then reload.'}
+            : 'KrayoSkriptz uses ads to keep scripts free. Turn off your ad blocker for this site, then check again.'}
         </p>
         {isChecking ? null : (
-          <button type="button" style={adBlockGateStyles.button} onClick={() => window.location.reload()}>
-            Reload page
+          <button type="button" style={adBlockGateStyles.button} onClick={onRetry}>
+            Check again
           </button>
         )}
       </div>
@@ -1084,7 +1091,7 @@ function App() {
   const isAdminPage = currentPath.startsWith('/admin');
 
   useGlobalAdScripts(!isAdminPage);
-  const adBlockStatus = useAdBlockDetection(!isAdminPage);
+  const { status: adBlockStatus, retry: retryAdBlockCheck } = useAdBlockDetection(!isAdminPage);
 
   const { posts, loading, error } = usePosts();
   const isPostPage = currentPath.startsWith('/post/');
@@ -1109,7 +1116,7 @@ function App() {
           {page}
         </>
       ) : null}
-      <AdBlockGate status={adBlockStatus} />
+      <AdBlockGate status={adBlockStatus} onRetry={retryAdBlockCheck} />
     </>
   );
 }
