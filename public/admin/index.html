@@ -203,6 +203,19 @@
         display: block;
       }
 
+      body.is-signed-in .loginColumn {
+        display: none;
+      }
+
+      body.is-signed-in .grid {
+        grid-template-columns: 1fr;
+      }
+
+      body.is-signed-in .adminWork {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
       .panel {
         padding: 18px;
       }
@@ -309,6 +322,29 @@
         border: 1px solid var(--line);
         border-radius: 12px;
         background: rgba(255, 255, 255, 0.035);
+      }
+
+      .postItem.editing {
+        grid-template-columns: 1fr;
+      }
+
+      .postActions {
+        display: inline-flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 8px;
+      }
+
+      .postEditForm {
+        display: grid;
+        gap: 10px;
+      }
+
+      .postEditActions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 8px;
       }
 
       .postItem strong {
@@ -436,7 +472,7 @@
 
           <section class="panel">
             <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
-              <h2>Recent posts</h2>
+              <h2>Posts</h2>
               <button class="ghostButton" id="refreshButton" type="button">Refresh</button>
             </div>
             <div class="posts" id="posts"></div>
@@ -468,6 +504,7 @@
       const postMessage = document.getElementById('postMessage');
       const postsEl = document.getElementById('posts');
       const refreshButton = document.getElementById('refreshButton');
+      let currentPosts = [];
 
       function setMessage(element, text, type = '') {
         element.className = `message ${type}`.trim();
@@ -493,6 +530,72 @@
         return Number.isNaN(date.getTime()) ? 'no date' : date.toLocaleString();
       }
 
+      function renderPosts(posts, editingId = '') {
+        currentPosts = posts;
+
+        if (!posts.length) {
+          postsEl.innerHTML = '<div class="message warn">No posts found yet.</div>';
+          return;
+        }
+
+        postsEl.innerHTML = posts.map((post) => {
+          const title = post.title || post.YoutubeLink || 'Untitled post';
+          const youtube = post.YoutubeLink || '';
+          const lootlabs = post.LootlabsLink || '';
+          const thumbnail = post.thumbnail || '';
+          const createdAt = formatDate(post.created_at);
+          const isEditing = post.id === editingId;
+
+          if (isEditing) {
+            return `
+              <article class="postItem editing">
+                <form class="postEditForm" data-edit-form="${escapeHtml(post.id)}">
+                  <label>
+                    YouTube link
+                    <input name="YoutubeLink" type="url" value="${escapeHtml(youtube)}" required />
+                  </label>
+                  <label>
+                    Lootlabs link
+                    <input name="LootlabsLink" type="url" value="${escapeHtml(lootlabs)}" required />
+                  </label>
+                  ${Object.prototype.hasOwnProperty.call(post, 'title') ? `
+                    <label>
+                      Optional title
+                      <input name="title" type="text" maxlength="180" value="${escapeHtml(post.title || '')}" />
+                    </label>
+                  ` : ''}
+                  ${Object.prototype.hasOwnProperty.call(post, 'thumbnail') ? `
+                    <label>
+                      Optional thumbnail URL
+                      <input name="thumbnail" type="url" value="${escapeHtml(thumbnail)}" />
+                    </label>
+                  ` : ''}
+                  <div class="postEditActions">
+                    <button class="ghostButton" type="button" data-cancel-edit="${escapeHtml(post.id)}">Cancel</button>
+                    <button class="primaryButton" type="submit">Save</button>
+                  </div>
+                </form>
+              </article>
+            `;
+          }
+
+          return `
+            <article class="postItem">
+              <div>
+                <strong>${escapeHtml(title)}</strong>
+                <span>${escapeHtml(youtube)}</span>
+                <span>${escapeHtml(lootlabs)}</span>
+                <span>${escapeHtml(createdAt)}</span>
+              </div>
+              <div class="postActions">
+                <button class="ghostButton" type="button" data-edit="${escapeHtml(post.id)}">Edit</button>
+                <button class="dangerButton" type="button" data-delete="${escapeHtml(post.id)}">Delete</button>
+              </div>
+            </article>
+          `;
+        }).join('');
+      }
+
       function setFormState(session) {
         const signedIn = Boolean(session?.user?.email);
         document.body.classList.toggle('is-signed-in', signedIn);
@@ -507,6 +610,9 @@
           postCount.textContent = '-';
           dbStatus.textContent = 'Checking...';
           postForm.reset();
+          setMessage(postMessage, 'Sign in to add posts.');
+        } else if (postMessage.textContent === 'Sign in to add posts.') {
+          setMessage(postMessage, 'Ready.');
         }
       }
 
@@ -535,7 +641,7 @@
         let lastError = null;
 
         for (const select of selects) {
-          let query = supabase.from('posts').select(select).limit(12);
+          let query = supabase.from('posts').select(select);
 
           if (select.includes('created_at')) {
             query = query.order('created_at', { ascending: false });
@@ -563,26 +669,11 @@
         }
 
         if (!data.length) {
-          postsEl.innerHTML = '<div class="message warn">No posts found yet.</div>';
+          renderPosts([]);
           return;
         }
 
-        postsEl.innerHTML = data.map((post) => {
-          const title = post.title || post.YoutubeLink || 'Untitled post';
-          const lootlabs = post.LootlabsLink || 'No Lootlabs link';
-          const createdAt = formatDate(post.created_at);
-
-          return `
-            <article class="postItem">
-              <div>
-                <strong>${escapeHtml(title)}</strong>
-                <span>${escapeHtml(lootlabs)}</span>
-                <span>${escapeHtml(createdAt)}</span>
-              </div>
-              <button class="dangerButton" type="button" data-delete="${escapeHtml(post.id)}">Delete</button>
-            </article>
-          `;
-        }).join('');
+        renderPosts(data);
       }
 
       loginForm.addEventListener('submit', async (event) => {
@@ -641,25 +732,85 @@
       });
 
       postsEl.addEventListener('click', async (event) => {
-        const button = event.target.closest('[data-delete]');
+        const editButton = event.target.closest('[data-edit]');
+        const cancelButton = event.target.closest('[data-cancel-edit]');
+        const deleteButton = event.target.closest('[data-delete]');
 
-        if (!button) {
+        if (editButton) {
+          renderPosts(currentPosts, editButton.getAttribute('data-edit'));
           return;
         }
 
-        const id = button.getAttribute('data-delete');
-        button.disabled = true;
-        button.textContent = 'Deleting...';
+        if (cancelButton) {
+          renderPosts(currentPosts);
+          return;
+        }
+
+        if (!deleteButton) {
+          return;
+        }
+
+        const id = deleteButton.getAttribute('data-delete');
+        deleteButton.disabled = true;
+        deleteButton.textContent = 'Deleting...';
         const { error } = await supabase.from('posts').delete().eq('id', id);
 
         if (error) {
           setMessage(postMessage, error.message, 'bad');
-          button.disabled = false;
-          button.textContent = 'Delete';
+          deleteButton.disabled = false;
+          deleteButton.textContent = 'Delete';
           return;
         }
 
         setMessage(postMessage, 'Post deleted.', 'ok');
+        await checkDatabase();
+        await loadPosts();
+      });
+
+      postsEl.addEventListener('submit', async (event) => {
+        const form = event.target.closest('[data-edit-form]');
+
+        if (!form) {
+          return;
+        }
+
+        event.preventDefault();
+        const id = form.getAttribute('data-edit-form');
+        const originalPost = currentPosts.find((post) => post.id === id);
+
+        if (!originalPost) {
+          setMessage(postMessage, 'Post not found. Refresh and try again.', 'bad');
+          return;
+        }
+
+        const submitButton = form.querySelector('button[type="submit"]');
+        submitButton.disabled = true;
+        submitButton.textContent = 'Saving...';
+
+        const formData = new FormData(form);
+        const payload = {
+          YoutubeLink: String(formData.get('YoutubeLink') || '').trim(),
+          LootlabsLink: String(formData.get('LootlabsLink') || '').trim()
+        };
+
+        if (Object.prototype.hasOwnProperty.call(originalPost, 'title')) {
+          payload.title = String(formData.get('title') || '').trim() || null;
+        }
+
+        if (Object.prototype.hasOwnProperty.call(originalPost, 'thumbnail')) {
+          payload.thumbnail = String(formData.get('thumbnail') || '').trim() || null;
+        }
+
+        const { error } = await supabase.from('posts').update(payload).eq('id', id);
+
+        if (error) {
+          setMessage(postMessage, error.message, 'bad');
+          submitButton.disabled = false;
+          submitButton.textContent = 'Save';
+          return;
+        }
+
+        setMessage(postMessage, 'Post updated.', 'ok');
         await checkDatabase();
         await loadPosts();
       });
