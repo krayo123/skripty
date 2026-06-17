@@ -169,6 +169,12 @@
         font-size: 0.96rem;
       }
 
+      .statusBox .ghostButton {
+        width: 100%;
+        min-height: 34px;
+        margin-top: 2px;
+      }
+
       .grid {
         display: grid;
         grid-template-columns: minmax(260px, 0.8fr) minmax(320px, 1.2fr);
@@ -410,7 +416,7 @@
           </div>
           <div class="statusBox">
             <span>Session</span>
-            <strong id="sessionStatus">Checking...</strong>
+            <button class="ghostButton" id="sessionLogoutButton" type="button">Logout</button>
           </div>
         </div>
       </section>
@@ -496,7 +502,7 @@
 
       const dbStatus = document.getElementById('dbStatus');
       const postCount = document.getElementById('postCount');
-      const sessionStatus = document.getElementById('sessionStatus');
+      const sessionLogoutButton = document.getElementById('sessionLogoutButton');
       const loginForm = document.getElementById('loginForm');
       const logoutButton = document.getElementById('logoutButton');
       const authMessage = document.getElementById('authMessage');
@@ -599,7 +605,7 @@
       function setFormState(session) {
         const signedIn = Boolean(session?.user?.email);
         document.body.classList.toggle('is-signed-in', signedIn);
-        sessionStatus.textContent = signedIn ? session.user.email : 'Not signed in';
+        sessionLogoutButton.disabled = !signedIn;
         logoutButton.disabled = !signedIn;
         postForm.querySelectorAll('input, button').forEach((element) => {
           element.disabled = !signedIn;
@@ -695,6 +701,11 @@
       });
 
       logoutButton.addEventListener('click', async () => {
+        await supabase.auth.signOut();
+        setMessage(authMessage, 'Signed out.', 'warn');
+      });
+
+      sessionLogoutButton.addEventListener('click', async () => {
         await supabase.auth.signOut();
         setMessage(authMessage, 'Signed out.', 'warn');
       });
