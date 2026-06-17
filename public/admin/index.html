@@ -169,10 +169,23 @@
         font-size: 0.96rem;
       }
 
-      .statusBox .ghostButton {
-        width: 100%;
-        min-height: 34px;
-        margin-top: 2px;
+      .sessionLine {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .sessionLine strong {
+        min-width: 0;
+        overflow-wrap: anywhere;
+      }
+
+      .sessionLine .ghostButton {
+        flex: 0 0 auto;
+        min-height: 30px;
+        padding: 0 10px;
+        font-size: 0.76rem;
       }
 
       .grid {
@@ -416,7 +429,10 @@
           </div>
           <div class="statusBox">
             <span>Session</span>
-            <button class="ghostButton" id="sessionLogoutButton" type="button">Logout</button>
+            <div class="sessionLine">
+              <strong id="sessionStatus">Checking...</strong>
+              <button class="ghostButton" id="sessionLogoutButton" type="button">Log out</button>
+            </div>
           </div>
         </div>
       </section>
@@ -502,6 +518,7 @@
 
       const dbStatus = document.getElementById('dbStatus');
       const postCount = document.getElementById('postCount');
+      const sessionStatus = document.getElementById('sessionStatus');
       const sessionLogoutButton = document.getElementById('sessionLogoutButton');
       const loginForm = document.getElementById('loginForm');
       const logoutButton = document.getElementById('logoutButton');
@@ -605,6 +622,7 @@
       function setFormState(session) {
         const signedIn = Boolean(session?.user?.email);
         document.body.classList.toggle('is-signed-in', signedIn);
+        sessionStatus.textContent = signedIn ? session.user.email : 'Not signed in';
         sessionLogoutButton.disabled = !signedIn;
         logoutButton.disabled = !signedIn;
         postForm.querySelectorAll('input, button').forEach((element) => {
