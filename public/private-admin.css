@@ -2,6 +2,46 @@
   display: none !important;
 }
 
+body:has(.adminPanel input[autocomplete="current-password"]) .siteHeader,
+body:has(.adminPanel input[autocomplete="current-password"]) .adminHero,
+body:has(.adminPanel input[autocomplete="current-password"]) .adminNote,
+body:has(.adminPanel input[autocomplete="current-password"]) .adminPanel .eyebrow {
+  display: none !important;
+}
+
+body:has(.adminPanel input[autocomplete="current-password"]) .adminShell {
+  display: grid !important;
+  place-items: center !important;
+  min-height: 100vh !important;
+  padding: 24px 0 !important;
+}
+
+body:has(.adminPanel input[autocomplete="current-password"]) .adminPanel {
+  width: min(100%, 420px) !important;
+}
+
+body:has(.adminPanel input[autocomplete="current-password"]) .adminPanel h2 {
+  font-size: 0 !important;
+}
+
+body:has(.adminPanel input[autocomplete="current-password"]) .adminPanel h2::after {
+  content: "Zaloguj";
+  font-size: 2rem;
+}
+
+body:has(.adminPanel input[autocomplete="current-password"]) .adminButton {
+  font-size: 0 !important;
+}
+
+body:has(.adminPanel input[autocomplete="current-password"]) .adminButton svg {
+  display: none !important;
+}
+
+body:has(.adminPanel input[autocomplete="current-password"]) .adminButton::after {
+  content: "Zaloguj";
+  font-size: 0.95rem;
+}
+
 .executorPoster img {
   position: absolute !important;
   inset: 0 !important;
