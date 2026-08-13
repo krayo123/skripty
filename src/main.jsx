@@ -55,7 +55,6 @@ const iframeAds = {
   leaderboard: { key: '27cbf4ff895d33adda60467b0a6419ae', width: 728, height: 90 },
   banner: { key: 'c9c26ab9e39ba477671b272bce2494eb', width: 468, height: 60 },
   mobile: { key: '65d65154be3174f30f7b3b767e09d31b', width: 320, height: 50 },
-  rectangle: { key: 'a0ec8512eb15caafae71c26a5a7aa1cb', width: 300, height: 250 },
   skyscraper: { key: '110512ebb009dc7a5a3cdb35e6da553a', width: 160, height: 300 },
   tallSkyscraper: { key: '75952d1ada641b0b480dfaf794dbe2cd', width: 160, height: 600 },
 };
@@ -1076,7 +1075,6 @@ function PostPage({ posts, loading, error }) {
         </aside>
 
         <div className="detailAds">
-          <IframeAdSlot ad={iframeAds.rectangle} className="rectangleAd" />
           <IframeAdSlot ad={iframeAds.skyscraper} className="skyscraperAd" />
           <IframeAdSlot ad={iframeAds.tallSkyscraper} className="tallSkyscraperAd" />
           <NativeAdSlot />
